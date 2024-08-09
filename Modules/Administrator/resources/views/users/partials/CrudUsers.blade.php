@@ -16,26 +16,26 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="fullname">FullName * :</label>
-                                <input type="text" id="fullname" value="0" class="form-control" name="fullname" required />
+                                <input type="text" id="fullname" class="form-control" name="fullname" required />
                             </div>
                             <div class="form-group">
                                 <label for="username">Username * :</label>
-                                <input type="text" id="username" value="0" class="form-control" name="username" required />
+                                <input type="text" id="username" class="form-control" name="username" required />
                             </div>
                             <div class="form-group">
                                 <label for="email">Email * :</label>
-                                <input type="text" value="0" id="email " class="form-control" name="email" required />
+                                <input type="email" id="email" class="form-control" name="email" required />
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone * :</label>
-                                <input type="text" id="phone" value="0" class="form-control" name="phone" required />
+                                <input type="text" id="phone" class="form-control" name="phone" required />
                             </div>
 
                         </div>
                         <div class="col md-3">
                             <div class="form-group">
                                 <label for="password">Password * :</label>
-                                <input type="password" value="0" id="password" class="form-control" name="password" required />
+                                <input type="password" id="password" class="form-control" name="password" required />
                             </div>
 
                             <div class="form-group">
@@ -119,7 +119,7 @@
                 align: 'center',
                 formatter: function(value, opt, row) {
                     var isChecked = row.addMenu == 1 ? 'checked' : '';
-                    if ($("#CrudUsersAction").val() == "create") {
+                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
                         var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
                     } else {
                         var disabled = row.statsMenu != 1 ? 'disabled' : ''
@@ -132,7 +132,7 @@
                 name: 'editMenu',
                 align: 'center',
                 formatter: function(value, opt, row) {
-                    if ($("#CrudUsersAction").val() == "create") {
+                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
                         var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
                     } else {
                         var disabled = row.statsMenu != 1 ? 'disabled' : ''
@@ -146,7 +146,7 @@
                 name: 'deleteMenu',
                 align: 'center',
                 formatter: function(value, opt, row) {
-                    if ($("#CrudUsersAction").val() == "create") {
+                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
                         var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
                     } else {
                         var disabled = row.statsMenu != 1 ? 'disabled' : ''
@@ -197,7 +197,7 @@
 
 
         $("#role_id").change(function() {
-            ReloadModalMenu();
+            ReloadModalMenu($("#id").val(), $("#role_id").val())
         })
     })
 

@@ -57,7 +57,7 @@ class MaterialController extends Controller
             $cust->packaging_id          = $req->packaging_id;
             $cust->location_id          = $req->location_id;
             $cust->updated_at       = date('Y-m-d H:i:s');
-            $cust->updated_by       = 1;
+            $cust->updated_by       = session()->get("user_id");
             $cust->save();
             try {
                 DB::commit();

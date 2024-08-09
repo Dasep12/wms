@@ -38,9 +38,9 @@ class Roles extends Model
         $start = ($page - 1) * $limit;
 
         // Total count of records
-        $qry = "SELECT COUNT(1) AS count FROM tbl_mst_role ";
+        $qry = "SELECT COUNT(1) AS count FROM tbl_mst_role WHERE  roleName != 'Developer'";
         if ($req->search) {
-            $qry .= " WHERE roleName='$req->search' ";
+            $qry .= " AND roleName='$req->search' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -64,10 +64,11 @@ class Roles extends Model
         group by tsm.MenuName , tsr.role_id , tsm.Menu_id
         order by cast(substring(tsm.menu_id,4,3)as int ) asc  
         )X on a.id  = X.role_id 
+        WHERE roleName != 'Developer'
         GROUP BY a.id, 
         a.roleName, a.code_role , a.status_role , a.created_at,a.created_by , a.updated_by , a.updated_at  ";
         if ($req->search) {
-            $query .= " WHERE roleName='$req->search' ";
+            $query .= " AND roleName='$req->search' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);
@@ -166,20 +167,12 @@ class Roles extends Model
                     'code_role'         => $req->code_role,
                     'status_role'       => $req->status_role == null ? 0 : 1,
                     'created_at'        => date('Y-m-d H:i:s'),
-                    'created_by'        => 1,
+                    'created_by'        => session()->get("user_id"),
                     'updated_at'        => date('Y-m-d H:i:s'),
-                    'updated_by'        => 1,
+                    'updated_by'        => session()->get("user_id"),
                 ]);
             $lastId  = DB::getPdo()->lastInsertId();
             $menuItems = [];
-            // foreach ($req->checkedMenu as $key => $val) {
-            //     $menuItems[] = array(
-            //         'menu_id' => $req->checkedMenu[$key],
-            //         'role_id' => $lastId,
-            //         'created_at' => date('Y-m-d H:i:s'),
-            //         'created_by' => 1
-            //     );
-            // }
             $allMenus = $req->allMenu;
             $checked = $req->checkedMenu;
 

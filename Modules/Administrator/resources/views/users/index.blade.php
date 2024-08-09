@@ -8,7 +8,7 @@
                 <h2>Users</h2>
                 <div class="nav navbar-right panel_toolbox">
                     <div class="input-group">
-                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Roles..">
+                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Username ...">
                         <span class="input-group-btn">
                             <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
@@ -23,7 +23,9 @@
                 <hr>
 
                 <div class="form-group">
+                    @if(CrudMenuPermission($MenuUrl, $user_id, "add"))
                     <button type="button" name="tloEnable" onclick="CrudUsers('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
+                    @endif
                     <button type="button" name="tloEnable" onclick="Reload()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
                 </div>
             </div>
@@ -45,13 +47,13 @@
         }).trigger('reloadGrid');
     }
 
-    function ReloadModalMenu() {
+    function ReloadModalMenu(id, roleId) {
         $("#jqGridMainModal").jqGrid('setGridParam', {
             datatype: 'json',
             mtype: 'GET',
             postData: {
                 role_id: $("#role_id").val(),
-                user_id: $("#user_id").val()
+                user_id: $("#id").val()
             }
         }).trigger('reloadGrid');
     }
@@ -86,6 +88,32 @@
                 label: 'Username',
                 name: 'username',
                 align: 'left',
+            }, {
+                label: 'Fullname',
+                name: 'fullname',
+                align: 'left',
+            }, {
+                label: 'Telp',
+                name: 'phone',
+                align: 'left'
+            }, {
+                label: 'Email',
+                name: 'email',
+                align: 'left'
+            }, {
+                label: 'role_id',
+                name: 'role_id',
+                align: 'left',
+                hidden: true
+            }, {
+                label: 'customers_id',
+                name: 'customers_id',
+                align: 'left',
+                hidden: true
+            }, {
+                label: 'password',
+                name: 'password',
+                align: 'left'
             }, {
                 label: 'Status ',
                 name: 'status_user',
@@ -142,8 +170,18 @@
 
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
-            var btn = `<button data-id="${btnid}" onclick="CrudUsers('update','${btnid}')"  class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
-            btn += `<a  data-id="${btnid}" onclick="CrudUsers('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></a>`;
+            var btn = "";
+            <?php
+            if (CrudMenuPermission($MenuUrl, $user_id, 'edit')) { ?>
+                btn += `<button data-id="${btnid}" onclick="CrudUsers('update','${btnid}')"  class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } ?>
+            <?php if (CrudMenuPermission($MenuUrl, $user_id, 'delete')) { ?>
+                btn += `<button  data-id="${btnid}" onclick="CrudUsers('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } ?>
             return btn;
         }
 
@@ -157,11 +195,21 @@
         var Grid = $('#jqGridMain'),
             selRowId = Grid.jqGrid('getGridParam', 'selrow'),
             idRoles = Grid.jqGrid('getCell', idx, 'id'),
-            roleName = Grid.jqGrid('getCell', idRoles, 'roleName'),
-            code_role = Grid.jqGrid('getCell', idRoles, 'code_role');
-        $("#id").val(idx)
-        $("#roleName").val(roleName)
-        $("#code_role").val(code_role)
+            fullname = Grid.jqGrid('getCell', idRoles, 'fullname'),
+            email = Grid.jqGrid('getCell', idRoles, 'email'),
+            phone = Grid.jqGrid('getCell', idRoles, 'phone'),
+            role_id = Grid.jqGrid('getCell', idRoles, 'role_id'),
+            password = Grid.jqGrid('getCell', idRoles, 'password'),
+            customers_id = Grid.jqGrid('getCell', idRoles, 'customers_id'),
+            username = Grid.jqGrid('getCell', idRoles, 'username');
+        $("#id").val(idx);
+        $("#fullname").val(fullname);
+        $("#username").val(username);
+        $("#email").val(email);
+        $("#phone").val(phone);
+        $("#password").val(password);
+        $("#role_id").val(role_id).trigger('change');
+        $("#customers_id").val(customers_id).trigger('change');
     }
 
     function CrudUsers(action, idx) {
@@ -170,22 +218,22 @@
             document.getElementById("formCrudUsers").reset();
             $("#formCrudUsers .form-control").prop("disabled", false);
             $(".btn-title").html('<i class="fa fa-save"></i> Create')
-            $("#titleModal").html('Create Units')
+            $("#titleModal").html('Create Users')
             $('#modalCrudUsers').modal('show');
             $('#CrudUsersError').html("");
             $("#CrudUsersAction").val('create');
             $("#CrudUsersAlertDelete").html('');
-            ReloadModalMenu()
             $("#formCrudUsers .form-control").attr("readonly", false)
+            ReloadModalMenu($("#id").val(), $("#role_id").val())
         } else if (action == "update") {
             document.getElementById("formCrudUsers").reset();
             $(".btn-title").html('<i class="fa fa-save"></i> Update')
-            $("#titleModal").html('Update Units')
+            $("#titleModal").html('Update Users')
             $('#modalCrudUsers').modal('show');
             $('#CrudUsersError').html("");
             $("#CrudUsersAction").val('update')
-            ReloadModalMenu()
             loadFieldRoles(idx)
+            ReloadModalMenu($("#id").val(), $("#role_id").val())
             $(".form-control").removeClass("parsley-error");
             $(".parsley-required").html("");
             $("#CrudUsersAlertDelete").html('');
@@ -194,14 +242,14 @@
             document.getElementById("formCrudUsers").reset();
             $("#formCrudUsers .form-control").attr("readonly", true)
             loadFieldRoles(idx)
-            ReloadModalMenu()
             $(".btn-title").html('<i class="fa fa-trash"></i> Delete')
-            $("#titleModal").html('Delete Units')
+            $("#titleModal").html('Delete Users')
             $('#modalCrudUsers').modal('show');
             $('#CrudUsersError').html("");
             $("#CrudUsersAction").val('delete')
             $(".form-control").removeClass("parsley-error");
             $(".parsley-required").html("");
+            ReloadModalMenu($("#id").val(), $("#role_id").val())
             var errMsg = '<div class="col-md-12"><div class="alert alert-danger mt-2" role="alert"><span><b>Data Will Be Delete Permanently ,sure want delete ?</span></div></div>'
             $("#CrudUsersAlertDelete").html(errMsg)
         }

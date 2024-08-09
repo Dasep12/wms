@@ -138,45 +138,6 @@ class Inbound extends Model
         return $response;
     }
 
-    public static function jsonCreate($req)
-    {
-        DB::beginTransaction();
-        try {
-            try {
-                DB::table('tbl_mst_units')
-                    ->insert([
-                        'name_unit' => $req->name_unit,
-                        'code_unit' => $req->code_unit,
-                        'status_unit' => $req->status_unit,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => 1,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => 1,
-                    ]);
-                DB::commit();
-                return "success";
-            } catch (\Illuminate\Database\QueryException $ex) {
-                return $ex->getMessage();
-            }
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e->getMessage();
-        }
-    }
-
-    public static function jsonDelete($req)
-    {
-        DB::beginTransaction();
-        try {
-            DB::table('tbl_mst_units')->where('id', $req->id)->delete();
-            DB::commit();
-            return 'success';
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e->getMessage();
-        }
-    }
-
     public static function jsonListMaterialByCustomers($req)
     {
         $page = $req->input('page');

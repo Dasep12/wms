@@ -2,13 +2,12 @@
 
   use Illuminate\Support\Facades\DB;
 
-  $user_id = 4;
   ?>
 
   <!-- sidebar menu -->
   <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
-      <h3 class="text-center mr-4">Warehouse<br> Manajemen System</h3>
+      <h3 class="text-center mr-4">Warehouse<br> Manajemen System </h3>
       <ul class="nav side-menu">
         <?php
         $menuTop = DB::select("SELECT * FROM vw_sys_menu WHERE LevelNumber = 0 and user_id = '$user_id' and enable_menu = 1 ");

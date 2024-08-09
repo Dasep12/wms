@@ -55,7 +55,7 @@ class RolesController extends Controller
             $cust->code_role = $req->code_role;
             $cust->status_role = $req->status_role == null ? 0 : 1;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
 
             $allMenus = $req->allMenu;
             $checked = $req->checkedMenu;
@@ -66,7 +66,7 @@ class RolesController extends Controller
                     'enable_menu' => in_array($allMenus[$key], $checked, true),
                     'role_id' => $req->id,
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => 1
+                    'updated_by' => session()->get("user_id")
                 );
                 DB::table("tbl_sys_roleaccessmenu")
                     ->where(["role_id" => $req->id, "menu_id" => $allMenus[$key]])
@@ -95,7 +95,7 @@ class RolesController extends Controller
     public function jsonForListRoles(Request $request)
     {
         $query = $request->get('q');
-        $results = Roles::get(['id', 'roleName']);
+        $results = Roles::where('roleName', '!=', 'Developer')->get(['id', 'roleName']);
         return response()->json($results, 200);
     }
 }

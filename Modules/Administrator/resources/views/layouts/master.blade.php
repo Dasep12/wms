@@ -5,17 +5,14 @@
 $MenuUrl = "";
 ?>
 
-@php
-$globalVariable = 'This is a global variable';
-@endphp
 
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
             <div class="col-md-3 left_col menu_fixed">
                 <div class="left_col scroll-view">
-                    <div class="navbar nav_title justify-content-end" style="border: 0;">
-                        <img style="width: 80%;height: 40px !important;" src="{{ asset('assets/images/bonecom.png') }}" alt="..." class=" profile_img">
+                    <div class="navbar nav_title justify-content-center" style="border: 0;">
+                        <img style="width: 60%;height: 50px !important;" src="{{ asset('assets/images/logo-rim.jpg') }}" alt="..." class=" profile_img">
                     </div>
 
                     <div class="clearfix"></div>
@@ -68,11 +65,11 @@ $globalVariable = 'This is a global variable';
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('assets/images/img.jpg') }}" alt="">John Doe
+                                    <img src="{{ asset('assets/images/user_2.png') }}" alt="">{{ session()->get("fullname") }}
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="#"> Profile</a>
-                                    <a class="dropdown-item" href="#"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                    <a class="dropdown-item" href="{{ url('logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
                             </li>
 

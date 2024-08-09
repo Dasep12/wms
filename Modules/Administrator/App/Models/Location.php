@@ -103,9 +103,9 @@ class Location extends Model
                         'status_location'   => $req->status_location == null ? 0 : 1,
                         'warehouse_id'    => $req->warehouse_id,
                         'created_at'    => date('Y-m-d H:i:s'),
-                        'created_by'    => 1,
+                        'created_by'    => session()->get("user_id"),
                         'updated_at'    => date('Y-m-d H:i:s'),
-                        'updated_by'    => 1,
+                        'updated_by'    => session()->get("user_id"),
                     ]);
                 DB::commit();
                 return "success";

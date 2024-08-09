@@ -55,11 +55,39 @@ class UsersController extends Controller
             $cust = Users::find($req->id);
             $cust->username = $req->username;
             $cust->fullname = $req->fullname;
+            $cust->phone = $req->phone;
+            $cust->email = $req->email;
+            $cust->role_id = $req->role_id;
+            $cust->customers_id = $req->customers_id;
             $cust->status_user = $req->status_user == null ? 0 : 1;
             $cust->updated_at = date('Y-m-d H:i:s');
             $cust->updated_by = 1;
-            $cust->save();
+
+            // add new roles 
+            $menuItems = [];
+            $checkedAddMenu = $req->addMenu;
+            $checkedEditMenu = $req->editMenu;
+            $checkedDeleteMenu = $req->deleteMenu;
+            $allMenus = $req->idAccessMenu;
+            foreach ($allMenus as $key => $val) {
+                $data = array(
+                    'user_id'       => $req->id,
+                    'accessmenu_id' => $allMenus[$key],
+                    'add' =>  $checkedAddMenu != null ? in_array($allMenus[$key], $checkedAddMenu, true) : 0,
+                    'edit' => $checkedEditMenu != null ? in_array($allMenus[$key], $checkedEditMenu, true) : 0,
+                    'delete' => $checkedEditMenu != null ? in_array($allMenus[$key], $checkedDeleteMenu, true) : 0,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => 1
+                );
+                array_push($menuItems, $data);
+            }
+
+            DB::table('tbl_sys_accesmenu')->where('user_id', $req->id)->delete();
+            DB::table("tbl_sys_accesmenu")
+                ->insert($menuItems);
+
             try {
+                $cust->save();
                 DB::commit();
                 return response()->json(['msg' => 'success']);
             } catch (Exception $ex) {

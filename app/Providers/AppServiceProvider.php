@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        view()->share("MenuUrl", request()->path());
+        //view()->share("MenuUrl", request()->path());
+       // view()->share('user_id', Session::get("key", session()->get("user_id")));
     }
 }

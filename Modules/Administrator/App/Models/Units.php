@@ -103,9 +103,9 @@ class Units extends Model
                         'parent_id'     => $req->parent_id,
                         'remarks'       => $req->remarks,
                         'created_at'    => date('Y-m-d H:i:s'),
-                        'created_by'    => 1,
+                        'created_by'    => session()->get("user_id"),
                         'updated_at'    => date('Y-m-d H:i:s'),
-                        'updated_by'    => 1,
+                        'updated_by'    => session()->get("user_id"),
                     ]);
                 DB::commit();
                 return "success";

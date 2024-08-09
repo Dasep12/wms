@@ -41,9 +41,9 @@ class Users extends Model
 
         // Total count of records
         $qry = "SELECT COUNT(a.id) AS count from tbl_mst_users a
-        left join tbl_mst_role b on b.id  = a.role_id  ";
+        left join tbl_mst_role b on b.id  = a.role_id WHERE b.roleName != 'Developer' ";
         if ($req->search) {
-            $qry .= " WHERE username='$req->search' ";
+            $qry .= " AND username='$req->search' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -57,9 +57,9 @@ class Users extends Model
 
         // Fetch data using DB::raw
         $query = "SELECT a.* , b.roleName from tbl_mst_users a
-                left join tbl_mst_role b on b.id  = a.role_id ";
+                left join tbl_mst_role b on b.id  = a.role_id  WHERE b.roleName != 'Developer'";
         if ($req->search) {
-            $query .= " WHERE username='$req->search' ";
+            $query .= "  AND username='$req->search' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);
@@ -72,6 +72,11 @@ class Users extends Model
                 'roleName'           => $item->roleName,
                 'fullname'           => $item->fullname,
                 'username'           => $item->username,
+                'role_id'            => $item->role_id,
+                'password'           => $item->password,
+                'customers_id'       => $item->customers_id,
+                'phone'              => $item->phone,
+                'email'              => $item->email,
                 'status_user'        => $item->status_user,
                 'created_at'         => $item->created_at,
                 'created_by'         => $item->created_by,

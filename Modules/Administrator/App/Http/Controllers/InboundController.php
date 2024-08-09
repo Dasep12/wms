@@ -94,7 +94,7 @@ class InboundController extends Controller
                 'begin_stock_units'   => $stock[0]->qtyUnitsBeginStock,
                 'begin_stock_packaging'   => $stock[0]->qtyPackagingBeginStock,
                 'created_at'            => date('Y-m-d H:i:s'),
-                'created_by'            => 1,
+                'created_by'            => session()->get("user_id"),
             );
             array_push($detailMaterial, $details);
         }
@@ -118,43 +118,6 @@ class InboundController extends Controller
                 DB::rollBack();
                 return response()->json(['msg' => $ex->getMessage()]);
             }
-            // try {
-            //     try {
-            // for ($l = 0; $l < count($detailMaterial); $l++) {
-            //     DB::table('tbl_trn_detailshipingmaterial')->insert($detailMaterial[$l]);
-            //     $parent_IdDetails = DB::getPdo()->lastInsertId();
-            //     $stock_exist =    SummaryStock::where('material_id', $detailMaterial[$l]['material_id']);
-
-            //     if ($stock_exist->count() <= 0) {
-            //         $par = [
-            //             'material_id'   => $detailMaterial[$l]['material_id'],
-            //             'begin_stock'   => 0,
-            //             'inbound_stock' => $detailMaterial[$l]['qty'],
-            //             'end_stock'     => $detailMaterial[$l]['qty'],
-            //             'created_at'    => date('Y-m-d H:i:s'),
-            //             'headers_detail_id' => $parent_IdDetails
-            //         ];
-            //         SummaryStock::create($par);
-            //     } else {
-            //         $stock_exist_1 = SummaryStock::where('material_id', $detailMaterial[$l]['material_id'])->orderBy('id', 'DESC')->first();
-            //         SummaryStock::where('material_id', $detailMaterial[$l]['material_id'])->create([
-            //             'material_id'   => $detailMaterial[$l]['material_id'],
-            //             'begin_stock'   => $stock_exist_1->end_stock,
-            //             'inbound_stock' => $detailMaterial[$l]['qty'],
-            //             'end_stock'     => $stock_exist_1->end_stock + $detailMaterial[$l]['qty'],
-            //             'headers_detail_id' => $parent_IdDetails
-            //         ]);
-            //     }
-            // }
-            //         DB::commit();
-            //         return response()->json(['msg' => "err"]);
-            //     } catch (\Illuminate\Database\QueryException $ex) {
-            //         return response()->json(['msg' => $ex->getMessage()]);
-            //     }
-            // } catch (\Illuminate\Database\QueryException $ex) {
-            //     DB::rollBack();
-            //     return response()->json(['msg' => $ex->getMessage()]);
-            // }
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['msg' => $e->getMessage()]);
@@ -185,7 +148,7 @@ class InboundController extends Controller
                 'begin_stock_units'   => $stock[0]->qtyUnitsBeginStock,
                 'begin_stock_packaging'   => $stock[0]->qtyPackagingBeginStock,
                 'created_at'            => date('Y-m-d H:i:s'),
-                'created_by'            => 1,
+                'created_by'            => session()->get("user_id"),
             );
             array_push($detailMaterial, $details);
         }
@@ -210,6 +173,7 @@ class InboundController extends Controller
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',
                 'types'             => 'in',
+                'updated_at'        => session()->get("user_id")
             ];
             DB::table("tbl_trn_shipingmaterial")->where('id', $headersId)->update($dataHeader);
             DB::table('tbl_trn_detailshipingmaterial')->whereIn('id', $existingIdInDB)->delete();
@@ -248,12 +212,14 @@ class InboundController extends Controller
             DB::beginTransaction();
             try {
                 DB::table("tbl_trn_detailshipingmaterial")->where('headers_id', $req->id)->update([
-                    'updated_at'    => date('Y-m-d H:i:s')
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'updated_by'    => session()->get("user_id"),
                 ]);
                 DB::table("tbl_trn_shipingmaterial")->where('id', $req->id)->update([
                     'date_in'       => date('Y-m-d H:i:s'),
                     'status'        => "close",
-                    'updated_at'    => date('Y-m-d H:i:s')
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'updated_by'    => session()->get("user_id")
                 ]);
                 try {
                     DB::commit();

@@ -23,7 +23,9 @@
                 <hr>
 
                 <div class="form-group">
+                    @if(CrudMenuPermission($MenuUrl, $user_id, "add"))
                     <button type="button" name="tloEnable" onclick="CrudRoles('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
+                    @endif
                     <button type="button" name="tloEnable" onclick="Reload()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
                 </div>
             </div>
@@ -141,8 +143,18 @@
 
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
-            var btn = `<button data-id="${btnid}" onclick="CrudRoles('update','${btnid}')"  class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
-            btn += `<a  data-id="${btnid}" onclick="CrudRoles('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></a>`;
+            var btn = "";
+            <?php
+            if (CrudMenuPermission($MenuUrl, $user_id, 'edit')) { ?>
+                btn += `<button data-id="${btnid}" onclick="CrudRoles('update','${btnid}')"  class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } ?>
+            <?php if (CrudMenuPermission($MenuUrl, $user_id, 'delete')) { ?>
+                btn += `<button  data-id="${btnid}" onclick="CrudRoles('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } ?>
             return btn;
         }
 

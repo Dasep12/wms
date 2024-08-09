@@ -55,7 +55,7 @@ class LocationController extends Controller
             $cust->status_location = $req->status_location == null ? 0 : 1;
             $cust->warehouse_id = $req->warehouse_id;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
             $cust->save();
             try {
                 DB::commit();

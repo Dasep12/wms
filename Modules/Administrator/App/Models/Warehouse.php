@@ -101,9 +101,9 @@ class Warehouse extends Model
                         'Address'           => $req->Address,
                         'status_warehouse'  => $req->status_warehouse == null ? 0 : 1,
                         'created_at'        => date('Y-m-d H:i:s'),
-                        'created_by'        => 1,
+                        'created_by'        => session()->get("user_id"),
                         'updated_at'        => date('Y-m-d H:i:s'),
-                        'updated_by'        => 1,
+                        'updated_by'        => session()->get("user_id"),
                     ]);
                 DB::commit();
                 return "success";

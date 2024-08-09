@@ -51,7 +51,7 @@ class PackagingController extends Controller
             $cust->status_packaging = $req->status_packaging == null ? 0 : 1;
             // $cust->status_unit = $req->status_unitress;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
             $cust->save();
             try {
                 DB::commit();

@@ -78,7 +78,7 @@ class OutboundController extends Controller
                 'begin_stock_packaging'   => $material[$i]->StockqtyPackaging,
                 'details_unit'          => $material[$i]->details_unit,
                 'created_at'            => date('Y-m-d H:i:s'),
-                'created_by'            => 1,
+                'created_by'            => session()->get("user_id"),
             );
             array_push($detailMaterial, $details);
         }
@@ -198,12 +198,14 @@ class OutboundController extends Controller
             DB::beginTransaction();
             try {
                 DB::table("tbl_trn_detailshipingmaterial")->where('headers_id', $req->id)->update([
-                    'updated_at'    => date('Y-m-d H:i:s')
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'updated_by'    => session()->get("user_id")
                 ]);
                 DB::table("tbl_trn_shipingmaterial")->where('id', $req->id)->update([
                     'date_out'      => date('Y-m-d H:i:s'),
                     'status'        => "close",
-                    'updated_at'    => date('Y-m-d H:i:s')
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                    'updated_by'    => session()->get("user_id")
                 ]);
                 try {
                     DB::commit();

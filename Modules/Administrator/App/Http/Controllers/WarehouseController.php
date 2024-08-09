@@ -49,7 +49,7 @@ class WarehouseController extends Controller
             $cust->Address = $req->Address;
             $cust->status_warehouse = $req->status_warehouse == null ? 0 : 1;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
             $cust->save();
             try {
                 DB::commit();

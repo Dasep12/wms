@@ -49,7 +49,7 @@ class CustomersController extends Controller
             $cust->phone = $req->phone;
             $cust->email = $req->email;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
             $cust->save();
             try {
                 DB::commit();
