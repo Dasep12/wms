@@ -4,14 +4,10 @@ namespace Modules\Administrator\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Modules\Administrator\App\Models\Customers;
-use Modules\Administrator\App\Models\Material;
-use PhpParser\Node\Expr\Match_;
+
 
 class CustomersController extends Controller
 {

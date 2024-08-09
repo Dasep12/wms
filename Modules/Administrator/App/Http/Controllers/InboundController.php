@@ -3,6 +3,7 @@
 namespace Modules\Administrator\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -166,23 +167,28 @@ class InboundController extends Controller
         $detailMaterial = [];
         $headersId = $req->id;
         for ($i = 0; $i < count($material); $i++) {
+            // Create a DateTime object from the original date string
+            $stock =  DB::select("CALL sp_tbl_checkStock(" . $material[$i]->id . ")");
             $details = array(
                 'headers_id'    => $req->id,
-                // 'detail_id'     => $material[$i]->detail_id,
                 'material_id'   => $material[$i]->id,
-                'no_material'   => $material[$i]->no_material,
                 'name_material' => $material[$i]->name_material,
-                'nameStorage'   => $material[$i]->name_storage,
-                'storage'       => $material[$i]->totalStorage,
-                'qty'           => $material[$i]->qty,
-                'uom'           => $material[$i]->satuan,
-                'qtyPerUnit'    => $material[$i]->qtyUnit,
-                'unit'          => $material[$i]->name_unit,
-                'inbound'       => $material[$i]->qty * $material[$i]->qtyUnit,
+                'no_material'   => $material[$i]->no_material,
+                'uniqid'        => $material[$i]->uniqid,
+                'unit'          => $material[$i]->unit,
+                'units'         => $material[$i]->units,
+                'packaging'     => $material[$i]->packaging,
+                'qtyUnit'       => $material[$i]->qtyUnit,
+                'qtyUnits'      => $material[$i]->qtyUnits,
+                'qtyPackaging'  => $material[$i]->qtyPackaging,
+                'begin_stock_unit'   => $stock[0]->qtyUnitBeginStock,
+                'begin_stock_units'   => $stock[0]->qtyUnitsBeginStock,
+                'begin_stock_packaging'   => $stock[0]->qtyPackagingBeginStock,
+                'created_at'            => date('Y-m-d H:i:s'),
+                'created_by'            => 1,
             );
             array_push($detailMaterial, $details);
         }
-
 
 
 
@@ -191,6 +197,7 @@ class InboundController extends Controller
         $existingIdInDB = array_filter(array_column($listIdDetail, 'detail_id'));
         DB::beginTransaction();
         try {
+            $dates = DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
             $dataHeader = [
                 'customer_id'       => $req->customer_id,
                 // 'no_reference'      => $req->no_reference,
@@ -198,7 +205,7 @@ class InboundController extends Controller
                 'ship_to'           => $req->ship_to,
                 'driver'            => $req->driver,
                 'no_truck'          => $req->no_truck,
-                'date_trans'        => $req->date_trans,
+                'date_trans'        => $dates->format('Y-m-d H:i:s'),
                 'date_in'           => $req->date_in,
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',

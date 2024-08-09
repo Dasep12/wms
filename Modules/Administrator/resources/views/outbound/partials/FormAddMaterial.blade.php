@@ -59,13 +59,12 @@
 
                         </div>
                         <div class="col-lg-6">
-
                             <div class="form-group row">
-                                <label class="control-label col-md-4 col-sm-4 col-xs-4">Qty Inbound </label>
+                                <label class="control-label col-md-4 col-sm-4 col-xs-4">Stock Exist </label>
                                 <div class="col-md-8 col-sm-8 input-group">
-                                    <input type="text" id="QtyUnitInbound" class="form-control" onkeypress="return isNumberKey(event)">
+                                    <input type="text" readonly class="QtyUnitOutbound form-control" onkeypress="return isNumberKey(event)">
                                     <div class="input-group-prepend">
-                                        <span style="font-size: 13px !important;background: #E1E1E1;" class="input-group-text" id="qtyUnitLabel"></span>
+                                        <span style="font-size: 13px !important;background: #E1E1E1;" class="qtyUnitLabel input-group-text"></span>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +72,43 @@
                             <div class="form-group row">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4"></label>
                                 <div class="col-md-8 col-sm-8 input-group">
-                                    <input type="text" id="QtyUnitsInbound" class="form-control" onkeypress="return isNumberKey(event)">
+                                    <input type="text" readonly class="QtyUnitsOutbound form-control" onkeypress="return isNumberKey(event)">
+                                    <div class="input-group-prepend">
+                                        <span style="font-size: 13px !important;background: #E1E1E1;" class="qtySatuanLabel input-group-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-4"></label>
+                                <div class="col-md-8 col-sm-8 input-group">
+                                    <input type="text" readonly class="QtyPackagingOutbound form-control" onkeypress="return isNumberKey(event)">
+                                    <div class="input-group-prepend">
+                                        <span style="font-size: 13px !important;background: #E1E1E1;" class="qtyStorageLabel input-group-text"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-4">Qty Outbound </label>
+                                <div class="col-md-8 col-sm-8 input-group">
+                                    <input type="text" id="QtyUnitOutbound" class="form-control" onkeypress="return isNumberKey(event)">
+                                    <div class="input-group-prepend">
+                                        <span style="font-size: 13px !important;background: #E1E1E1;" class="input-group-text" id="qtyUnitLabel"></span>
+                                    </div>
+                                </div>
+                                <label class="control-label col-md-4 col-sm-4 col-xs-4"></label>
+                                <div class="col-md-8 col-sm-8">
+                                    <input type="text" style="margin-top: -10px;" class="form-control" id="details_unit" name="details_unit" placeholder="Details Units">
+                                    <div class="input-group-prepend">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-4 col-sm-4 col-xs-4"></label>
+                                <div class="col-md-8 col-sm-8 input-group">
+                                    <input type="text" id="QtyUnitsOutbound" class="form-control" onkeypress="return isNumberKey(event)">
                                     <div class="input-group-prepend">
                                         <span style="font-size: 13px !important;background: #E1E1E1;" class="input-group-text" id="qtySatuanLabel"></span>
                                     </div>
@@ -83,13 +118,11 @@
                             <div class="form-group row">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4"></label>
                                 <div class="col-md-8 col-sm-8 input-group">
-                                    <input type="text" id="QtyPackagingInbound" class="form-control" onkeypress="return isNumberKey(event)">
+                                    <input type="text" id="QtyPackagingOutbound" class="form-control" onkeypress="return isNumberKey(event)">
                                     <div class="input-group-prepend">
                                         <span style="font-size: 13px !important;background: #E1E1E1;" class="input-group-text" id="qtyStorageLabel"></span>
                                     </div>
-
                                     <input hidden type="text" name="QtyStorageLabelDeliveryMaterialField" id="QtyStorageLabelDeliveryMaterialField">
-
                                     <input hidden type="text" name="SatuanDeliveryMaterialField" id="SatuanDeliveryMaterialField">
                                 </div>
                             </div>
@@ -113,7 +146,7 @@
                 <button type="submit" class="btn btn-primary btn-sm btn-title btn-formAddMaterial"><i class="fa fa-check"></i> Select</button>
             </div>
             </form>
-            <div id="CrudInboundError"></div>
+            <div id="CrudOutboundError"></div>
 
 
         </div>
@@ -135,10 +168,13 @@
                 unit = $("#UnitMaterialField").val(),
                 units = $("#UnitsMaterialField").val(),
                 packaging = $("#PackagingMaterialField").val(),
-                qtyUnit = $("#QtyUnitInbound").val(),
-                qtyUnits = $("#QtyUnitsInbound").val(),
-                qtyPackaging = $("#QtyPackagingInbound").val();
-            console.log()
+                qtyUnit = $("#QtyUnitOutbound").val(),
+                qtyUnits = $("#QtyUnitsOutbound").val(),
+                qtyPackaging = $("#QtyPackagingOutbound").val(),
+                StockqtyUnit = $(".QtyUnitOutbound").val(),
+                StockqtyUnits = $(".QtyUnitsOutbound").val(),
+                details_unit = $("#details_unit").val(),
+                StockqtyPackaging = $(".QtyPackagingOutbound").val();
             var datas = {
                 'id': id,
                 'no_material': no_material,
@@ -150,19 +186,36 @@
                 'qtyUnit': qtyUnit,
                 'qtyUnits': qtyUnits,
                 'qtyPackaging': qtyPackaging,
+                'StockqtyUnit': StockqtyUnit,
+                'StockqtyUnits': StockqtyUnits,
+                'StockqtyPackaging': StockqtyPackaging,
+                'details_unit': details_unit,
                 'detail_id': ''
             }
+
             if (act == "create") {
-                dataMaterialInbound.push(datas);
-                reloadgridInboundList(dataMaterialInbound)
+                if (parseFloat(qtyUnit) > parseFloat($(".QtyUnitOutbound").val())) {
+                    doSuccess("", "request outbound melebihi qty stock exist", "warning")
+                } else if (parseFloat(qtyUnits) > parseFloat($(".QtyUnitsOutbound").val())) {
+                    doSuccess("", "request outbound melebihi qty stock exist", "warning")
+                } else if (parseFloat(qtyPackaging) > parseFloat($(".QtyPackagingOutbound").val())) {
+                    doSuccess("", "request outbound melebihi qty stock exist", "warning")
+                } else {
+                    dataMaterialOutbound.push(datas);
+                    reloadgridOutboundList(dataMaterialOutbound)
+                    $('#modalFormAddMaterial').modal('hide');
+
+                }
             } else if (act == "update") {
-                updateMaterialList(dataMaterialInbound, id, datas)
-                reloadgridInboundList(dataMaterialInbound)
+                updateMaterialList(dataMaterialOutbound, id, datas)
+                reloadgridOutboundList(dataMaterialOutbound)
+                $('#modalFormAddMaterial').modal('hide');
             } else if (act == "delete") {
-                dataMaterialInbound = dataMaterialInbound.filter(item => item.id != id);
-                reloadgridInboundList(dataMaterialInbound);
+                dataMaterialOutbound = dataMaterialOutbound.filter(item => item.id != id);
+                reloadgridOutboundList(dataMaterialOutbound);
+                $('#modalFormAddMaterial').modal('hide');
             }
-            $('#modalFormAddMaterial').modal('hide');
+
         }
     })
 

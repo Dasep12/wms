@@ -3,16 +3,13 @@
 namespace Modules\Administrator\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use DateTime;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Modules\Administrator\App\Models\Customers;
 use Modules\Administrator\App\Models\Outbound;
-use Modules\Administrator\App\Models\SummaryStock;
-use PhpParser\Node\Expr\Match_;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class OutboundController extends Controller
 {
@@ -36,17 +33,13 @@ class OutboundController extends Controller
         return response()->json($response);
     }
 
-    public function jsonListUnitsByCustomers(Request $req)
+    public function jsonStockListMaterialByCustomers(Request $req)
     {
-        $response = Customers::where('status_customer', '1')->get();
+        $response = Outbound::jsonStockListMaterialByCustomers($req);
         return response()->json($response);
     }
 
-    public function jsonDetailListMaterialEdit(Request $req)
-    {
-        $response = DB::select("SELECT * FROM  vw_tbl_Outbound_detail WHERE headers_id='$req->id' ");
-        return response()->json($response);
-    }
+
 
     public function jsonCreateOutbound(Request $req)
     {
@@ -54,16 +47,15 @@ class OutboundController extends Controller
 
         $dataHeader = [
             'customer_id'       => $req->customer_id,
-            'no_reference'      => $req->no_reference,
+            // 'no_reference'      => $req->no_reference,
             'no_surat_jalan'    => $req->no_surat_jalan,
             'ship_to'           => $req->ship_to,
             'driver'            => $req->driver,
             'no_truck'          => $req->no_truck,
             'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
-            'date_in'           => $req->date_in,
             'created_at'        => date('Y-m-d H:i:s'),
             'status'            => 'open',
-            'types'             => 'in',
+            'types'             => 'out',
         ];
 
         $detailMaterial = [];
@@ -72,21 +64,28 @@ class OutboundController extends Controller
             $details = array(
                 'headers_id'    => '',
                 'material_id'   => $material[$i]->id,
-                'no_material'   => $material[$i]->no_material,
                 'name_material' => $material[$i]->name_material,
-                'nameStorage'   => $material[$i]->name_storage,
-                'storage'       => $material[$i]->totalStorage,
-                'qty'           => $material[$i]->qty,
-                'uom'           => $material[$i]->satuan,
-                'qtyPerUnit'    => $material[$i]->qtyUnit,
-                'unit'          => $material[$i]->name_unit,
-                'Outbound'       => $material[$i]->qty * $material[$i]->qtyUnit,
+                'no_material'   => $material[$i]->no_material,
+                'uniqid'        => $material[$i]->uniqid,
+                'unit'          => $material[$i]->unit,
+                'units'         => $material[$i]->units,
+                'packaging'     => $material[$i]->packaging,
+                'qtyUnit'       => $material[$i]->qtyUnit,
+                'qtyUnits'      => $material[$i]->qtyUnits,
+                'qtyPackaging'  => $material[$i]->qtyPackaging,
+                'begin_stock_unit'   => $material[$i]->StockqtyUnit,
+                'begin_stock_units'   => $material[$i]->StockqtyUnits,
+                'begin_stock_packaging'   => $material[$i]->StockqtyPackaging,
+                'details_unit'          => $material[$i]->details_unit,
+                'created_at'            => date('Y-m-d H:i:s'),
+                'created_by'            => 1,
             );
             array_push($detailMaterial, $details);
         }
 
+
         if (count($material) <= 0) {
-            return response()->json(['msg' => "list material cannot empty"]);
+            return response()->json(['msg' => "list material tidak boleh kosong"]);
         }
 
         DB::beginTransaction();
@@ -105,43 +104,6 @@ class OutboundController extends Controller
                 DB::rollBack();
                 return response()->json(['msg' => $ex->getMessage()]);
             }
-            // try {
-            //     try {
-            // for ($l = 0; $l < count($detailMaterial); $l++) {
-            //     DB::table('tbl_trn_detailshipingmaterial')->insert($detailMaterial[$l]);
-            //     $parent_IdDetails = DB::getPdo()->lastInsertId();
-            //     $stock_exist =    SummaryStock::where('material_id', $detailMaterial[$l]['material_id']);
-
-            //     if ($stock_exist->count() <= 0) {
-            //         $par = [
-            //             'material_id'   => $detailMaterial[$l]['material_id'],
-            //             'begin_stock'   => 0,
-            //             'Outbound_stock' => $detailMaterial[$l]['qty'],
-            //             'end_stock'     => $detailMaterial[$l]['qty'],
-            //             'created_at'    => date('Y-m-d H:i:s'),
-            //             'headers_detail_id' => $parent_IdDetails
-            //         ];
-            //         SummaryStock::create($par);
-            //     } else {
-            //         $stock_exist_1 = SummaryStock::where('material_id', $detailMaterial[$l]['material_id'])->orderBy('id', 'DESC')->first();
-            //         SummaryStock::where('material_id', $detailMaterial[$l]['material_id'])->create([
-            //             'material_id'   => $detailMaterial[$l]['material_id'],
-            //             'begin_stock'   => $stock_exist_1->end_stock,
-            //             'Outbound_stock' => $detailMaterial[$l]['qty'],
-            //             'end_stock'     => $stock_exist_1->end_stock + $detailMaterial[$l]['qty'],
-            //             'headers_detail_id' => $parent_IdDetails
-            //         ]);
-            //     }
-            // }
-            //         DB::commit();
-            //         return response()->json(['msg' => "err"]);
-            //     } catch (\Illuminate\Database\QueryException $ex) {
-            //         return response()->json(['msg' => $ex->getMessage()]);
-            //     }
-            // } catch (\Illuminate\Database\QueryException $ex) {
-            //     DB::rollBack();
-            //     return response()->json(['msg' => $ex->getMessage()]);
-            // }
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json(['msg' => $e->getMessage()]);
@@ -158,15 +120,20 @@ class OutboundController extends Controller
                 'headers_id'    => $req->id,
                 // 'detail_id'     => $material[$i]->detail_id,
                 'material_id'   => $material[$i]->id,
-                'no_material'   => $material[$i]->no_material,
                 'name_material' => $material[$i]->name_material,
-                'nameStorage'   => $material[$i]->name_storage,
-                'storage'       => $material[$i]->totalStorage,
-                'qty'           => $material[$i]->qty,
-                'uom'           => $material[$i]->satuan,
-                'qtyPerUnit'    => $material[$i]->qtyUnit,
-                'unit'          => $material[$i]->name_unit,
-                'Outbound'       => $material[$i]->qty * $material[$i]->qtyUnit,
+                'no_material'   => $material[$i]->no_material,
+                'uniqid'        => $material[$i]->uniqid,
+                'unit'          => $material[$i]->unit,
+                'units'         => $material[$i]->units,
+                'packaging'     => $material[$i]->packaging,
+                'qtyUnit'       => $material[$i]->qtyUnit,
+                'qtyUnits'      => $material[$i]->qtyUnits,
+                'qtyPackaging'  => $material[$i]->qtyPackaging,
+                'begin_stock_unit'   => $material[$i]->StockqtyUnit,
+                'begin_stock_units'   => $material[$i]->StockqtyUnits,
+                'begin_stock_packaging'   => $material[$i]->StockqtyPackaging,
+                'created_at'            => date('Y-m-d H:i:s'),
+                'created_by'            => 1,
             );
             array_push($detailMaterial, $details);
         }
@@ -179,6 +146,8 @@ class OutboundController extends Controller
         $existingIdInDB = array_filter(array_column($listIdDetail, 'detail_id'));
         DB::beginTransaction();
         try {
+            // Create a DateTime object from the original date string
+            $dates = DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
             $dataHeader = [
                 'customer_id'       => $req->customer_id,
                 'no_reference'      => $req->no_reference,
@@ -186,11 +155,11 @@ class OutboundController extends Controller
                 'ship_to'           => $req->ship_to,
                 'driver'            => $req->driver,
                 'no_truck'          => $req->no_truck,
-                'date_trans'        => $req->date_trans,
+                'date_trans'        => $dates->format('Y-m-d H:i:s'),
                 'date_in'           => $req->date_in,
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',
-                'types'             => 'in',
+                'types'             => 'out',
             ];
             DB::table("tbl_trn_shipingmaterial")->where('id', $headersId)->update($dataHeader);
             DB::table('tbl_trn_detailshipingmaterial')->whereIn('id', $existingIdInDB)->delete();
@@ -221,5 +190,56 @@ class OutboundController extends Controller
                 return response()->json(['msg' => $e->getMessage()]);
             }
         }
+    }
+
+    public function jsonPutawayOutbound(Request $req)
+    {
+        if ($req->action == "putaway") {
+            DB::beginTransaction();
+            try {
+                DB::table("tbl_trn_detailshipingmaterial")->where('headers_id', $req->id)->update([
+                    'updated_at'    => date('Y-m-d H:i:s')
+                ]);
+                DB::table("tbl_trn_shipingmaterial")->where('id', $req->id)->update([
+                    'date_out'      => date('Y-m-d H:i:s'),
+                    'status'        => "close",
+                    'updated_at'    => date('Y-m-d H:i:s')
+                ]);
+                try {
+                    DB::commit();
+                    return response()->json(['msg' => "success"]);
+                } catch (\Illuminate\Database\QueryException $ex) {
+                    DB::rollBack();
+                    return response()->json(['msg' =>  $ex->getMessage()]);
+                }
+            } catch (Exception $e) {
+                return response()->json(['msg' => $e->getMessage()]);
+            }
+        }
+    }
+
+
+    public function jsonSuratJalanOutbound(Request $req)
+    {
+
+        $par = DB::select("SELECT * FROM vw_tbl_sj WHERE headers_id = $req->id ");
+
+        $data = ["data" => $par];
+        Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        Pdf::setPaper('A4', 'portrait');
+        $pdf = Pdf::loadView('administrator::outbound.surat_jalan', $data);
+        return $pdf->stream();
+        return $pdf->download('invoice.pdf');
+
+        // $mpdf = new \Mpdf\Mpdf(['orientation' => 'P']);
+        // $mpdf->WriteHTML(view("administrator::outbound.surat_jalan", ['data' => $data]));
+
+        // $mpdf->Output();
+        // return view('administrator::outbound.surat_jalan');
+    }
+
+    public function generateDN(Request $req)
+    {
+        return getSuratJalanNumber($req->customers_id);
     }
 }

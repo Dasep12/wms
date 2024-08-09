@@ -11,7 +11,7 @@
 
 
             <div class="x_title">
-                <h2>Inbound</h2>
+                <h2>Outbound</h2>
 
                 <div class="nav navbar-right panel_toolbox">
                     <!-- <div class="input-group">
@@ -30,7 +30,9 @@
                 <hr>
 
                 <div class="form-group">
-                    <button type="button" name="tloEnable" onclick="CrudInbound('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
+                    @if(CrudMenuPermission($MenuUrl, 1, "add"))
+                    <button type="button" name="tloEnable" onclick="CrudOutbound('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
+                    @endif
                     <button type="button" name="tloEnable" onclick="ReloadBarang()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
                 </div>
             </div>
@@ -46,8 +48,8 @@
         setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
     });
 
-    //  Prepare  Data Material Inbound
-    var dataMaterialInbound = [];
+    //  Prepare  Data Material Outbound
+    var dataMaterialOutbound = [];
 
     function ReloadBarang() {
         $("#jqGridMain").jqGrid('setGridParam', {
@@ -65,14 +67,14 @@
         $("#searching").val("")
     }
 </script>
-@include('administrator::inbound.partials.CrudInbound')
-@include('administrator::inbound.partials.AddMaterial')
-@include('administrator::inbound.partials.FormAddMaterial')
+@include('administrator::outbound.partials.CrudOutbound')
+@include('administrator::outbound.partials.AddMaterial')
+@include('administrator::outbound.partials.FormAddMaterial')
 <script>
     $(document).ready(function() {
 
         $("#jqGridMain").jqGrid({
-            url: "{{ url('administrator/jsonInbound') }}",
+            url: "{{ url('administrator/jsonOutbound') }}",
             datatype: "json",
             mtype: "GET",
             postData: {
@@ -85,20 +87,20 @@
                     key: true,
                     hidden: true,
                 }, {
-                    label: 'Putaway',
+                    label: 'Document',
                     name: 'id',
                     width: 30,
                     align: 'center',
                     formatter: function(cellvalue, options, rowObject) {
                         var lock = rowObject.status == "open" ? '' : "disabled";
                         var btnid = rowObject.id;
-                        return `<button ${lock} type="button" data-id="${btnid}" onclick="CrudInbound('putaway','${btnid}')" class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-upload"></i></button>`
+                        return `<a  href="{{ url("administrator/jsonSuratJalanOutbound") }}?id=${ btnid }" data-id="${btnid}"  class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-file-pdf-o"></i></a>`
                     }
                 }, {
                     label: 'Action',
                     name: 'id',
                     align: 'center',
-                    width: 40,
+                    width: 50,
                     formatter: actionBarangFormatter
                 }, {
                     label: 'Status',
@@ -129,12 +131,13 @@
                     label: 'DN',
                     name: 'no_surat_jalan',
                     align: 'center',
-                    width: 50,
+                    width: 90,
                 }, {
                     label: 'No Ref',
                     name: 'no_reference',
                     align: 'center',
                     width: 60,
+                    hidden: true
                 }, {
                     label: 'Driver',
                     name: 'driver',
@@ -272,8 +275,18 @@
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
             var lock = rowObject.status == "open" ? '' : "disabled";
-            var btn = `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button>`;
-            btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            var btn = "";
+            <?php
+            if (CrudMenuPermission($MenuUrl, 1, 'edit')) { ?>
+                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudOutbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button><button ${lock} type="button" data-id="${btnid}" onclick="CrudOutbound('putaway','${btnid}')" class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-truck"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button><button type="button" disabled class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-truck"></i></button>`;
+            <?php } ?>
+            <?php if (CrudMenuPermission($MenuUrl, 1, 'delete')) { ?>
+                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudOutbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } ?>
             return btn;
         }
 
@@ -288,73 +301,71 @@
 
 
 
-
-
-
-    function CrudInbound(action, idx) {
+    function CrudOutbound(action, idx) {
 
         $("#ValidateField").html('');
         if (action == "create") {
-            document.getElementById("formCrudInbound").reset();
-            dataMaterialInbound = [];
-            reloadgridInboundList(dataMaterialInbound);
+            document.getElementById("formCrudOutbound").reset();
+            dataMaterialOutbound = [];
+            reloadgridOutboundList(dataMaterialOutbound);
             $("#QtyStorageDeliveryMaterialField").attr("readonly", false)
             $("#QtyDeliveryMaterialField").attr("readonly", false)
-            $("#formCrudInbound .form-control").prop("disabled", false);
+            $("#formCrudOutbound .form-control").prop("disabled", false);
             $(".btn-titless").html('<i class="fa fa-save"></i> Create')
-            $("#titleModal").html('Create Inbound')
-            $('#modalCrudInbound').modal('show');
-            $('#CrudInboundError').html("");
-            $("#CrudInboundAction").val('create');
-            $("#CrudInboundAlertDelete").html('');
-            $("#formCrudInbound .form-control").attr("readonly", false)
-            $(".btnResetField").attr("disabled", false)
+            $("#titleModal").html('Create Outbound')
+            $('#modalCrudOutbound').modal('show');
+            $('#CrudOutboundError').html("");
+            $("#CrudOutboundAction").val('create');
+            $("#CrudOutboundAlertDelete").html('');
+            $("#formCrudOutbound .form-control").attr("readonly", false)
+            $("#no_surat_jalan").attr("readonly", true);
+            $(".btnResetField").attr("disabled", false);
         } else if (action == "update") {
-            document.getElementById("formCrudInbound").reset();
+            document.getElementById("formCrudOutbound").reset();
             loadDetail(idx)
             loadMateriaList(idx)
             $(".btn-titless").html('<i class="fa fa-save"></i> Update')
             $("#titleModal").html('Update Inbound')
-            $('#modalCrudInbound').modal('show');
-            $('#CrudInboundError').html("");
-            $("#CrudInboundAction").val('update')
+            $('#modalCrudOutbound').modal('show');
+            $('#CrudOutboundError').html("");
+            $("#CrudOutboundAction").val('update')
             $(".form-control").removeClass("parsley-error");
             $(".parsley-required").html("");
-            $("#CrudInboundAlertDelete").html('');
-            $("#formCrudInbound .form-control").attr("readonly", false)
+            $("#CrudOutboundAlertDelete").html('');
+            $("#formCrudOutbound .form-control").attr("readonly", false)
             $(".btnResetField").attr("disabled", false)
         } else if (action == "delete") {
-            document.getElementById("formCrudInbound").reset();
+            document.getElementById("formCrudOutbound").reset();
             $(".btn-titless").html('<i class="fa fa-trash"></i> Delete')
-            $("#titleModal").html('Delete Inbound')
-            $('#modalCrudInbound').modal('show');
-            $('#CrudInboundError').html("");
-            $("#CrudInboundAction").val('delete')
+            $("#titleModal").html('Delete Outbound')
+            $('#modalCrudOutbound').modal('show');
+            $('#CrudOutboundError').html("");
+            $("#CrudOutboundAction").val('delete')
             $(".btnResetField").attr("disabled", true)
-            $("#formCrudInbound .form-control").attr("readonly", true)
+            $("#formCrudOutbound .form-control").attr("readonly", true)
 
             loadDetail(idx)
             loadMateriaList(idx)
             $(".form-control").removeClass("parsley-error");
             $(".parsley-required").html("");
             var errMsg = '<div class="col-md-12"><div class="alert alert-danger mt-2" role="alert"><span><b>Data Akan Di Hapus Secara Permanen, yakin lanjut hapus ?</span></div></div>'
-            $("#CrudInboundAlertDelete").html(errMsg)
+            $("#CrudOutboundAlertDelete").html(errMsg)
         } else if (action == "putaway") {
-            document.getElementById("formCrudInbound").reset();
-            $(".btn-titless").html('<i class="fa fa-upload"></i> Add To Stock')
+            document.getElementById("formCrudOutbound").reset();
+            $(".btn-titless").html('<i class="fa fa-truck"></i> Taking Stock')
             $("#titleModal").html('Putaway')
-            $('#modalCrudInbound').modal('show');
-            $('#CrudInboundError').html("");
-            $("#CrudInboundAction").val('putaway')
+            $('#modalCrudOutbound').modal('show');
+            $('#CrudOutboundError').html("");
+            $("#CrudOutboundAction").val('putaway')
             $(".btnResetField").attr("disabled", true)
-            $("#formCrudInbound .form-control").attr("readonly", true)
+            $("#formCrudOutbound .form-control").attr("readonly", true)
 
             loadDetail(idx)
             loadMateriaList(idx)
             $(".form-control").removeClass("parsley-error");
             $(".parsley-required").html("");
-            var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2" role="alert"><span><b>Data Akan Di Tambahkan ke Stock ,yakin data sudah benar ?</span></div></div>'
-            $("#CrudInboundAlertDelete").html(errMsg)
+            var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2" role="alert"><span><b>Mengirim Data Akan Mengurangi Jumlah Stock ,yakin data sudah benar ?</span></div></div>'
+            $("#CrudOutboundAlertDelete").html(errMsg)
         }
     }
 
@@ -369,6 +380,7 @@
             no_truck = Grid.jqGrid('getCell', selRowId, 'no_truck'),
             driver = Grid.jqGrid('getCell', selRowId, 'driver'),
             date_trans = Grid.jqGrid('getCell', selRowId, 'date_trans'),
+            date_transs = Grid.jqGrid('getCell', selRowId, 'date_transs'),
             no_surat_jalan = Grid.jqGrid('getCell', selRowId, 'no_surat_jalan');
         $("#customer_id").val(customer_id).trigger('change');
         $("#ship_to").val(ship_to);
@@ -377,6 +389,7 @@
         $("#no_surat_jalan").val(no_surat_jalan);
         // $("#no_reference").val(no_reference);
         $("#date_trans").val(date_trans);
+        $("#date_transs").val(date_transs);
         $("#id").val(idx)
 
 
@@ -391,10 +404,10 @@
                 "_token": "{{ csrf_token() }}",
             },
             beforeSend: function() {
-                dataMaterialInbound = [];
+                dataMaterialOutbound = [];
             },
             success: function(res) {
-                dataMaterialInbound = [];
+                dataMaterialOutbound = [];
                 for (let i = 0; i < res.length; i++) {
                     var datas = {
                         'id': res[i].material_id,
@@ -408,10 +421,14 @@
                         'qtyUnits': res[i].qtyUnits,
                         'qtyPackaging': res[i].qtyPackaging,
                         'detail_id': res[i].id,
+                        'StockqtyUnit': res[i].begin_stock_unit,
+                        'StockqtyUnits': res[i].begin_stock_units,
+                        'StockqtyPackaging': res[i].begin_stock_packaging,
+                        'details_unit': res[i].details_unit,
                     }
-                    dataMaterialInbound.push(datas);
+                    dataMaterialOutbound.push(datas);
                 }
-                reloadgridInboundList(dataMaterialInbound);
+                reloadgridOutboundList(dataMaterialOutbound);
             }
         })
     }

@@ -31,10 +31,7 @@ class Outbound extends Model
         $start = ($page - 1) * $limit;
 
         // Total count of records
-        $qry = "SELECT COUNT(1) AS count FROM vw_tbl_outbound ";
-        // if ($req->search) {
-        //     $qry .= " WHERE name_unit='$req->search' ";
-        // }
+        $qry = "SELECT COUNT(1) AS count FROM vw_tbl_outbound  ";
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
 
@@ -47,9 +44,6 @@ class Outbound extends Model
 
         // Fetch data using DB::raw
         $query = "SELECT * FROM vw_tbl_outbound  ";
-        // if ($req->search) {
-        //     $query .= " WHERE name_unit='$req->search' ";
-        // }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);
 
@@ -63,7 +57,7 @@ class Outbound extends Model
                 'name_customers'    => ucwords(strtoupper($item->name_customers)),
                 'status'            => $item->status,
                 'no_surat_jalan'    => $item->no_surat_jalan,
-                'no_reference'      => $item->no_reference,
+                // 'no_reference'      => $item->no_reference,
                 'ship_to'           => ucwords(strtolower($item->ship_to)),
                 'driver'            => ucwords(strtolower($item->driver)),
                 'no_truck'          => $item->no_truck,
@@ -118,12 +112,11 @@ class Outbound extends Model
                 'no_material'       => $item->no_material,
                 'name_material'     => strtoupper($item->name_material),
                 'unit'              => $item->unit,
-                'nameStorage'       => $item->nameStorage,
-                'storage'           => $item->storage,
-                'inbound'           => $item->inbound,
-                'uom'               => $item->uom,
-                'qty'               => $item->qty,
-                'qtyUnit'           => $item->qtyPerUnit,
+                'units'             => $item->units,
+                'packaging'         => $item->packaging,
+                'qtyUnit'           => $item->qtyUnit,
+                'qtyUnits'          => $item->qtyUnits,
+                'qtyPackaging'      => $item->qtyPackaging,
                 'cell' => [
                     $item->id,
                 ] // Adjust fields as needed
@@ -139,42 +132,59 @@ class Outbound extends Model
         return $response;
     }
 
-    public static function jsonCreate($req)
+    public static function jsonStockListMaterialByCustomers($req)
     {
-        DB::beginTransaction();
-        try {
-            try {
-                DB::table('tbl_mst_units')
-                    ->insert([
-                        'name_unit' => $req->name_unit,
-                        'code_unit' => $req->code_unit,
-                        'status_unit' => $req->status_unit,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'created_by' => 1,
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'updated_by' => 1,
-                    ]);
-                DB::commit();
-                return "success";
-            } catch (\Illuminate\Database\QueryException $ex) {
-                return $ex->getMessage();
-            }
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e->getMessage();
-        }
-    }
+        $page = $req->input('page');
+        $limit = $req->input('rows');
+        $sidx = $req->input('sidx', 'id');
+        $sord = $req->input('sord', 'asc');
+        $start = ($page - 1) * $limit;
 
-    public static function jsonDelete($req)
-    {
-        DB::beginTransaction();
-        try {
-            DB::table('tbl_mst_units')->where('id', $req->id)->delete();
-            DB::commit();
-            return 'success';
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e->getMessage();
+        // Total count of records
+        $qry = "SELECT COUNT(1) AS count FROM vw_tbl_control_stock WHERE customers_id = '$req->customers_id'  ";
+
+        $countResult = DB::select($qry);
+        $count = $countResult[0]->count;
+
+        // Total pages calculation
+        if ($count > 0) {
+            $total_pages = ceil($count / $limit);
+        } else {
+            $total_pages = 0;
         }
+
+        // Fetch data using DB::raw
+        $query = "SELECT * FROM vw_tbl_control_stock WHERE customers_id = '$req->customers_id' ORDER BY updated_at DESC LIMIT  $start , $limit  ";
+
+        $data = DB::select($query);
+
+        // Prepare rows for jqGrid
+        $rows = [];
+        foreach ($data as $item) {
+            $rows[] = [
+                'id'                => $item->id,
+                'uniqueId'          => $item->uniqueId,
+                'units'             => $item->units,
+                'unit'              => $item->unit,
+                'packaging'         => $item->packaging,
+                'name_material'     => $item->name_material,
+                'no_material'        => $item->no_material,
+                'QtyUnit'           => $item->QtyUnit,
+                'QtyUnits'          => $item->QtyUnits,
+                'QtyPackaging'      => $item->QtyPackaging,
+                'updated_at'      => $item->updated_at,
+                'cell' => [
+                    $item->id,
+                ] // Adjust fields as needed
+            ];
+        }
+
+        $response = [
+            'page' => $page,
+            'total' => $total_pages,
+            'records' => $count,
+            'rows' => $rows
+        ];
+        return $response;
     }
 }

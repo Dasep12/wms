@@ -26,7 +26,7 @@
 
 <script>
     $("#jqGridListMaterial").jqGrid({
-        url: "{{ url('administrator/jsonListMaterialByCustomers') }}",
+        url: "{{ url('administrator/jsonStockListMaterialByCustomers') }}",
         datatype: "json",
         mtype: "GET",
         postData: {
@@ -56,17 +56,32 @@
             width: 70
         }, {
             label: 'Units',
+            name: 'units',
+            align: 'center',
+            width: 90
+        }, {
+            label: 'Unit',
             name: 'unit',
             align: 'center',
             width: 90
         }, {
-            label: 'Satuan',
-            name: 'satuan',
+            label: 'Packaging',
+            name: 'packaging',
             align: 'center',
             width: 90
         }, {
-            label: 'Packaging',
-            name: 'name_packaging',
+            label: 'Qty Units',
+            name: 'QtyUnits',
+            align: 'center',
+            width: 90
+        }, {
+            label: 'Qty Unit',
+            name: 'QtyUnit',
+            align: 'center',
+            width: 90
+        }, {
+            label: 'Qty Packaging',
+            name: 'QtyPackaging',
             align: 'center',
             width: 90
         }],
@@ -115,25 +130,36 @@
             uniqueId = Grid.jqGrid('getCell', selRowId, 'uniqueId'),
             material_id = Grid.jqGrid('getCell', selRowId, 'id'),
             unit = Grid.jqGrid('getCell', selRowId, 'unit'),
-            unitQty = Grid.jqGrid('getCell', selRowId, 'unitQty'),
-            packaging = Grid.jqGrid('getCell', selRowId, 'name_packaging'),
-            satuan = Grid.jqGrid('getCell', selRowId, 'satuan');
+            units = Grid.jqGrid('getCell', selRowId, 'units'),
+            packaging = Grid.jqGrid('getCell', selRowId, 'packaging'),
+            StockQtyUnit = Grid.jqGrid('getCell', selRowId, 'QtyUnit'),
+            StockQtyUnits = Grid.jqGrid('getCell', selRowId, 'QtyUnits'),
+            StockQtyPackaging = Grid.jqGrid('getCell', selRowId, 'QtyPackaging');
 
-        //$("#qtyPerUnitLabel").html(satuan)
         $("#qtyUnitLabel").html(unit)
         $("#qtyStorageLabel").html(packaging)
-        $("#qtySatuanLabel").html(satuan)
+        $("#qtySatuanLabel").html(units)
+        $(".qtyUnitLabel").html(unit)
+        $(".qtyStorageLabel").html(packaging)
+        $(".qtySatuanLabel").html(units)
         $("#QtyStorageLabelDeliveryMaterialField").val(packaging)
-        $("#SatuanDeliveryMaterialField").val(satuan)
+        $("#SatuanDeliveryMaterialField").val(units)
+
+        $(".QtyUnitOutbound").val(StockQtyUnit)
+        $(".QtyUnitsOutbound").val(StockQtyUnits)
+        $(".QtyPackagingOutbound").val(StockQtyPackaging)
+
 
         if (materialExists(idMaterialField)) {
-            alert("Material has been added in list")
+            // alert("Material has been added in list")
+            doSuccess("", "Material has been added in list", "warning")
         } else {
             $("#nameMaterialField").val(name_material)
+            $("#details_unit").attr("placeholder", "Details Unit Per " + unit);
             $("#noMaterialField").val(no_material)
             $("#UniqueIdMaterialField").val(uniqueId)
             $("#UnitMaterialField").val(unit)
-            $("#UnitsMaterialField").val(satuan)
+            $("#UnitsMaterialField").val(units)
             $("#PackagingMaterialField").val(packaging)
             // $("#QtyUnitMaterialField").val(unitQty)
             $("#idMaterialField").val(idMaterialField)
@@ -148,7 +174,7 @@
     }
 
     function materialExists(idx) {
-        return dataMaterialInbound.some(function(el) {
+        return dataMaterialOutbound.some(function(el) {
             return el.id == idx;
         });
     }

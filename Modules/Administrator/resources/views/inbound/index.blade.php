@@ -14,12 +14,12 @@
                 <h2>Inbound</h2>
 
                 <div class="nav navbar-right panel_toolbox">
-                    <!-- <div class="input-group">
-                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Customers..">
+                    <div class="input-group">
+                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search DN..">
                         <span class="input-group-btn">
                             <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -30,7 +30,9 @@
                 <hr>
 
                 <div class="form-group">
+                    @if(CrudMenuPermission($MenuUrl, 1, "add"))
                     <button type="button" name="tloEnable" onclick="CrudInbound('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
+                    @endif
                     <button type="button" name="tloEnable" onclick="ReloadBarang()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
                 </div>
             </div>
@@ -135,6 +137,7 @@
                     name: 'no_reference',
                     align: 'center',
                     width: 60,
+                    hidden: true
                 }, {
                     label: 'Driver',
                     name: 'driver',
@@ -147,10 +150,10 @@
                     width: 60,
                 },
                 {
-                    label: 'ship_to',
+                    label: 'Ship To',
                     name: 'ship_to',
                     align: 'left',
-                    hidden: true
+                    hidden: false
                 }, {
                     label: 'no_truck',
                     name: 'no_truck',
@@ -272,8 +275,18 @@
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
             var lock = rowObject.status == "open" ? '' : "disabled";
-            var btn = `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button>`;
-            btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            var btn = "";
+            <?php
+            if (CrudMenuPermission($MenuUrl, 1, 'edit')) { ?>
+                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button>`;
+            <?php } ?>
+            <?php if (CrudMenuPermission($MenuUrl, 1, 'delete')) { ?>
+                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudInbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } else { ?>
+                btn += `<button disabled class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+            <?php } ?>
             return btn;
         }
 

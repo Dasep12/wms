@@ -16,6 +16,8 @@ use Modules\Administrator\App\Http\Controllers\AdministratorController;
 
 Route::group(['prefix' => 'administrator'], function () {
 
+    // DASHBOARD ROUTES 
+    Route::get('dashboard', 'DashboardController@index');
 
 
     // UNITS ROUTES 
@@ -86,31 +88,50 @@ Route::group(['prefix' => 'administrator'], function () {
     // INBOUND ROUTES 
     Route::get('inbound', 'InboundController@index');
     Route::get('jsonInbound', 'InboundController@jsonInbound');
-    Route::get('jsonDetailMaterial', 'InboundController@jsonDetailMaterial');
-    Route::get('jsonListUnitsByCustomers', 'InboundController@jsonListUnitsByCustomers');
-    Route::get('jsonListMaterialByCustomers', 'InboundController@jsonListMaterialByCustomers');
     Route::post('jsonCreateInbound', 'InboundController@jsonCreateInbound');
     Route::post('jsonUpdateInbound', 'InboundController@jsonUpdateInbound');
     Route::post('jsonDeleteInbound', 'InboundController@jsonDeleteInbound');
     Route::post('jsonPutawayInbound', 'InboundController@jsonPutawayInbound');
+
+
+    Route::get('jsonDetailMaterial', 'InboundController@jsonDetailMaterial');
+    Route::get('jsonListUnitsByCustomers', 'InboundController@jsonListUnitsByCustomers');
+    Route::get('jsonListMaterialByCustomers', 'InboundController@jsonListMaterialByCustomers');
     Route::get('jsonDetailListMaterialEdit', 'InboundController@jsonDetailListMaterialEdit');
 
 
     // OUTBOUND ROUTES 
     Route::get('outbound', 'OutboundController@index');
     Route::get('jsonOutbound', 'OutboundController@jsonOutbound');
-    Route::get('jsonDetailMaterial', 'OutboundController@jsonDetailMaterial');
-    Route::get('jsonListUnitsByCustomers', 'OutboundController@jsonListUnitsByCustomers');
-    Route::get('jsonListMaterialByCustomers', 'OutboundController@jsonListMaterialByCustomers');
     Route::post('jsonCreateOutbound', 'OutboundController@jsonCreateOutbound');
     Route::post('jsonUpdateOutbound', 'OutboundController@jsonUpdateOutbound');
     Route::post('jsonDeleteOutbound', 'OutboundController@jsonDeleteOutbound');
     Route::post('jsonPutawayOutbound', 'OutboundController@jsonPutawayOutbound');
-    Route::get('jsonDetailListMaterialEdit', 'OutboundController@jsonDetailListMaterialEdit');
+    Route::get('jsonStockListMaterialByCustomers', 'OutboundController@jsonStockListMaterialByCustomers');
+    Route::get('jsonSuratJalanOutbound', 'OutboundController@jsonSuratJalanOutbound');
+    Route::post('generateDN', 'OutboundController@generateDN');
 
 
-    // UNITS SUMMARY 
+    // MATERIAL SUMMARY 
     Route::get('summary', 'SummaryController@index');
     Route::get('jsonSummary', 'SummaryController@jsonSummary');
     Route::get('jsonDetailSummary', 'SummaryController@jsonDetailSummary');
+
+    // ROLES ROUTES 
+    Route::get('roles', 'RolesController@index');
+    Route::get('jsonRole', 'RolesController@jsonRole');
+    Route::get('jsonDetailListMenu', 'RolesController@jsonDetailListMenu');
+    Route::post('jsonCreateRoles', 'RolesController@jsonCreate');
+    Route::post('jsonDeleteRoles', 'RolesController@jsonDelete');
+    Route::post('jsonUpdateRoles', 'RolesController@jsonUpdate');
+    Route::get('jsonForListRoles', 'RolesController@jsonForListRoles');
+
+
+    // USERS ROUTES 
+    Route::get('users', 'UsersController@index');
+    Route::get('jsonUsers', 'UsersController@jsonUsers');
+    Route::get('jsonListMenuForUsers', 'UsersController@jsonListMenuForUsers');
+    Route::post('jsonCreateUsers', 'UsersController@jsonCreate');
+    Route::post('jsonDeleteUsers', 'UsersController@jsonDelete');
+    Route::post('jsonUpdateUsers', 'UsersController@jsonUpdate');
 });
