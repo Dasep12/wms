@@ -135,4 +135,16 @@ Route::group(['prefix' => 'administrator'], function () {
     Route::post('jsonCreateUsers', 'UsersController@jsonCreate');
     Route::post('jsonDeleteUsers', 'UsersController@jsonDelete');
     Route::post('jsonUpdateUsers', 'UsersController@jsonUpdate');
+
+
+
+    // ADJUSTMENT ROUTES 
+    Route::get('adjustment', 'AdjustmentController@index');
+    Route::get('jsonAdjustment', 'AdjustmentController@jsonAdjustment');
+    Route::post('jsonCreateAdjustment', 'AdjustmentController@jsonCreateAdjustment');
+    Route::post('jsonUpdateAdjustment', 'AdjustmentController@jsonUpdateAdjustment');
+    Route::post('jsonDeleteAdjustment', 'AdjustmentController@jsonDeleteAdjustment');
+    Route::post('jsonPutawayAdjustment', 'AdjustmentController@jsonPutawayAdjustment');
+    Route::get('jsonStockListMaterialByCustomers', 'AdjustmentController@jsonStockListMaterialByCustomers');
+    Route::post('generateDN', 'AdjustmentController@generateDN');
 });

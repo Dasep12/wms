@@ -133,6 +133,7 @@ class SummaryStock extends Model
                 'dates'                 => $item->dates,
                 'packaging'             => $item->packaging,
                 'types'                 => strtoupper($item->types),
+                'types_trans'           => strtoupper($item->types_trans),
                 'QtyUnit'               => $item->QtyUnit,
                 'QtyUnits'              => $item->QtyUnits,
                 'QtyPackaging'          => $item->QtyPackaging,

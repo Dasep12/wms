@@ -8,7 +8,7 @@ function getSuratJalanNumber($idCustomers)
     if ($idCustomers) {
         $data =  DB::select("SELECT max(substr(tts.no_surat_jalan,1,4)) noUrut  
         from  tbl_trn_shipingmaterial tts
-        where types ='out' and tts.customer_id  = 1 ");
+        where types ='out' and tts.customer_id  = $idCustomers ");
         $cust  = Customers::find($idCustomers);
 
         if ($data[0]->noUrut) {
@@ -18,6 +18,27 @@ function getSuratJalanNumber($idCustomers)
             return $DN;
         } else {
             $DN =  '0001/' . "SJ/" . 'RIM/' . $cust->code_customers . '/' . getRomawiMonth((int) date('m')) . '/' . date('Y');
+            return $DN;
+        }
+    }
+    return null;
+}
+
+function getSuratJalanAdjust($idCustomers)
+{
+    if ($idCustomers) {
+        $data =  DB::select("SELECT max(substr(tts.no_surat_jalan,1,4)) noUrut  
+        from  tbl_trn_shipingmaterial tts
+        where types_trans ='Adjust' and tts.customer_id  = $idCustomers ");
+        $cust  = Customers::find($idCustomers);
+
+        if ($data[0]->noUrut) {
+            $increase =  $data[0]->noUrut + 1;
+            $str_dn_ = str_pad($increase, 4, 0, STR_PAD_LEFT);
+            $DN =  $str_dn_ . '/' . "ADJUST/" . 'RIM/' . $cust->code_customers . '/' . getRomawiMonth((int) date('m')) . '/' . date('Y');
+            return $DN;
+        } else {
+            $DN =  '0001/' . "ADJUST/" . 'RIM/' . $cust->code_customers . '/' . getRomawiMonth((int) date('m')) . '/' . date('Y');
             return $DN;
         }
     }

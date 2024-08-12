@@ -72,6 +72,7 @@ class InboundController extends Controller
             'created_at'        => date('Y-m-d H:i:s'),
             'status'            => 'open',
             'types'             => 'in',
+            'types_trans'       => 'Order',
         ];
 
 
@@ -161,8 +162,6 @@ class InboundController extends Controller
         DB::beginTransaction();
         try {
             date_default_timezone_set('Asia/Jakarta');
-            // $dates =  date("Y-m-d H:i:s", strtotime($req->date_trans));
-            //DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
             $dataHeader = [
                 'customer_id'       => $req->customer_id,
                 'no_reference'      => $req->no_reference,
@@ -175,6 +174,7 @@ class InboundController extends Controller
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',
                 'types'             => 'in',
+                'types_trans'       => 'Order',
                 'updated_at'        => date('Y-m-d H:i:s'),
                 'updated_by'        => session()->get("user_id")
             ];

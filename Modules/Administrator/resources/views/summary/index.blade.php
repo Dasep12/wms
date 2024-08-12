@@ -186,7 +186,12 @@ use Illuminate\Support\Facades\DB;
                             newformat: "d F Y H:i:s"
                         }
                     }, {
-                        label: "Types",
+                        label: "Trans",
+                        name: "types_trans",
+                        width: 50,
+                        align: "center"
+                    }, {
+                        label: "Type",
                         name: "types",
                         width: 50,
                         align: "center"
@@ -194,7 +199,7 @@ use Illuminate\Support\Facades\DB;
                     {
                         label: "Units",
                         name: "units",
-                        width: 60,
+                        width: 68,
                         align: 'center',
                     }, {
                         label: "Packaging",
@@ -276,6 +281,10 @@ use Illuminate\Support\Facades\DB;
                     startColumnName: 'EndStockUnits',
                     numberOfColumns: 2,
                     titleText: 'Final Stock'
+                }, {
+                    startColumnName: 'types_trans',
+                    numberOfColumns: 2,
+                    titleText: 'Types'
                 }]
             });
         }

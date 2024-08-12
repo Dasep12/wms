@@ -7,56 +7,55 @@ use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Modules\Administrator\App\Models\Outbound;
+use Modules\Administrator\App\Models\Adjustment;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
-class OutboundController extends Controller
+class AdjustmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('administrator::outbound/index');
+        return view('administrator::adjustment/index');
     }
 
-    public function jsonOutbound(Request $req)
+    public function jsonAdjustment(Request $req)
     {
-        $response = Outbound::jsonList($req);
+        $response = Adjustment::jsonList($req);
         return response()->json($response);
     }
 
     public function jsonDetailMaterial(Request $req)
     {
-        $response = Outbound::jsonListDetail($req);
+        $response = Adjustment::jsonListDetail($req);
         return response()->json($response);
     }
 
     public function jsonStockListMaterialByCustomers(Request $req)
     {
-        $response = Outbound::jsonStockListMaterialByCustomers($req);
+        $response = Adjustment::jsonStockListMaterialByCustomers($req);
         return response()->json($response);
     }
 
 
 
-    public function jsonCreateOutbound(Request $req)
+    public function jsonCreateAdjustment(Request $req)
     {
         $material = json_decode($req->dataMaterial);
-
         $dataHeader = [
             'customer_id'       => $req->customer_id,
             // 'no_reference'      => $req->no_reference,
             'no_surat_jalan'    => $req->no_surat_jalan,
-            'ship_to'           => $req->ship_to,
-            'driver'            => $req->driver,
-            'no_truck'          => $req->no_truck,
+            // 'ship_to'           => $req->ship_to,
+            // 'driver'            => $req->driver,
+            'remarks'           => $req->remarks,
             'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
             'created_at'        => date('Y-m-d H:i:s'),
             'status'            => 'open',
-            'types'             => 'out',
-            'types_trans'       => 'Order',
+            'types'             =>  $req->type_adjust,
+            'types_trans'       => 'Adjust',
         ];
 
         $detailMaterial = [];
@@ -111,7 +110,7 @@ class OutboundController extends Controller
         }
     }
 
-    public function jsonUpdateOutbound(Request $req)
+    public function jsonUpdateAdjustment(Request $req)
     {
         $material = json_decode($req->dataMaterial);
         $detailMaterial = [];
@@ -158,8 +157,8 @@ class OutboundController extends Controller
                 'date_in'           => $req->date_in,
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',
-                'types'             => 'out',
-                'types_trans'       => 'Order',
+                'types'             =>  $req->type_adjust,
+                'types_trans'       => 'Adjust',
             ];
             DB::table("tbl_trn_shipingmaterial")->where('id', $headersId)->update($dataHeader);
             DB::table('tbl_trn_detailshipingmaterial')->whereIn('id', $existingIdInDB)->delete();
@@ -172,7 +171,7 @@ class OutboundController extends Controller
         }
     }
 
-    public function jsonDeleteOutbound(Request $req)
+    public function jsonDeleteAdjustment(Request $req)
     {
         if ($req->action == "delete") {
             DB::beginTransaction();
@@ -192,20 +191,21 @@ class OutboundController extends Controller
         }
     }
 
-    public function jsonPutawayOutbound(Request $req)
+    public function jsonPutawayAdjustment(Request $req)
     {
         if ($req->action == "putaway") {
             DB::beginTransaction();
             try {
                 DB::table("tbl_trn_detailshipingmaterial")->where('headers_id', $req->id)->update([
                     'updated_at'    => date('Y-m-d H:i:s'),
-                    'updated_by'    => session()->get("user_id")
+                    'updated_by'    => session()->get("user_id"),
                 ]);
                 DB::table("tbl_trn_shipingmaterial")->where('id', $req->id)->update([
-                    'date_out'      => date('Y-m-d H:i:s'),
                     'status'        => "close",
                     'updated_at'    => date('Y-m-d H:i:s'),
-                    'updated_by'    => session()->get("user_id")
+                    'updated_by'    => session()->get("user_id"),
+                    'date_in'       => date('Y-m-d H:i:s'),
+                    'date_out'      => date('Y-m-d H:i:s'),
                 ]);
                 try {
                     DB::commit();
@@ -221,27 +221,8 @@ class OutboundController extends Controller
     }
 
 
-    public function jsonSuratJalanOutbound(Request $req)
-    {
-
-        $par = DB::select("SELECT * FROM vw_tbl_sj WHERE headers_id = $req->id ");
-
-        $data = ["data" => $par];
-        Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        Pdf::setPaper('A4', 'portrait');
-        $pdf = Pdf::loadView('administrator::outbound.surat_jalan', $data);
-        return $pdf->stream();
-        return $pdf->download('invoice.pdf');
-
-        // $mpdf = new \Mpdf\Mpdf(['orientation' => 'P']);
-        // $mpdf->WriteHTML(view("administrator::outbound.surat_jalan", ['data' => $data]));
-
-        // $mpdf->Output();
-        // return view('administrator::outbound.surat_jalan');
-    }
-
     public function generateDN(Request $req)
     {
-        return getSuratJalanNumber($req->customers_id);
+        return getSuratJalanAdjust($req->customers_id);
     }
 }
