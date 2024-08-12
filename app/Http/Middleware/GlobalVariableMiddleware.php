@@ -18,6 +18,8 @@ class GlobalVariableMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         View::share('user_id', session()->get("user_id"));
+        View::share('role_id', session()->get("role_id"));
+        View::share('customers_id', session()->get("customers_id"));
         View::share('MenuUrl', request()->path());
         return $next($request);
     }

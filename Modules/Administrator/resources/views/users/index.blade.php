@@ -65,6 +65,8 @@
 </script>
 @include('administrator::users.partials.CrudUsers')
 <script>
+    // saya pun bisa lelah  ^_^
+
     $(document).ready(function() {
 
         $("#jqGridMain").jqGrid({
@@ -81,7 +83,7 @@
                 key: true,
                 hidden: true,
             }, {
-                label: 'Role Name',
+                label: 'Role',
                 name: 'roleName',
                 align: 'left'
             }, {
@@ -113,7 +115,8 @@
             }, {
                 label: 'password',
                 name: 'password',
-                align: 'left'
+                align: 'left',
+                hidden: true
             }, {
                 label: 'Status ',
                 name: 'status_user',
@@ -123,10 +126,11 @@
                     var badge = rowObject.status_user == 1 ? 'badge-success' : 'badge-danger';
                     return `<span class="badge ${badge}">${status}</span>`;
                 },
+                width: 60
             }, {
                 label: 'Date',
                 name: 'created_at',
-                align: 'left',
+                align: 'center',
                 formatter: "date",
                 formatoptions: {
                     srcformat: "ISO8601Long",
@@ -165,8 +169,6 @@
             rowList: [10, 30, 50],
             pager: "#pager"
         });
-
-
 
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;

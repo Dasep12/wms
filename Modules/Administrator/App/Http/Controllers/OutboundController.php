@@ -120,6 +120,7 @@ class OutboundController extends Controller
                 'headers_id'    => $req->id,
                 // 'detail_id'     => $material[$i]->detail_id,
                 'material_id'   => $material[$i]->id,
+                'details_unit'  => $material[$i]->details_unit,
                 'name_material' => $material[$i]->name_material,
                 'no_material'   => $material[$i]->no_material,
                 'uniqid'        => $material[$i]->uniqid,
@@ -137,9 +138,6 @@ class OutboundController extends Controller
             );
             array_push($detailMaterial, $details);
         }
-
-
-
 
 
         $listIdDetail = DB::select("SELECT id as detail_id FROM tbl_trn_detailshipingmaterial WHERE headers_id = '$headersId' ");

@@ -64,7 +64,7 @@ class Roles extends Model
         group by tsm.MenuName , tsr.role_id , tsm.Menu_id
         order by cast(substring(tsm.menu_id,4,3)as int ) asc  
         )X on a.id  = X.role_id 
-        WHERE roleName != 'Developer'
+        -- WHERE roleName != 'Developer'
         GROUP BY a.id, 
         a.roleName, a.code_role , a.status_role , a.created_at,a.created_by , a.updated_by , a.updated_at  ";
         if ($req->search) {
@@ -123,13 +123,23 @@ class Roles extends Model
         }
 
         // Fetch data using DB::raw
-        $query = "SELECT a.Menu_id , a.MenuName , a.MenuLevel , a.MenuIcon ,a.LevelNumber, X.enable_menu FROM tbl_sys_menu a 
-        left join (
-        select tsr.enable_menu , tsr.menu_id  from tbl_sys_roleaccessmenu tsr
-        where  tsr.role_id = '" . $req->id . "'
-        group by tsr.menu_id ,tsr.enable_menu
+        $query = "SELECT a.Menu_id , a.ParentMenu , a.MenuName , a.MenuLevel , a.MenuIcon ,a.LevelNumber, X.enable_menu 
+        FROM tbl_sys_menu a 
+            left join (
+                select tsr.enable_menu , tsr.menu_id  from tbl_sys_roleaccessmenu tsr
+                where  tsr.role_id = '$req->id'
+                group by tsr.menu_id ,tsr.enable_menu
         )X on X.menu_id = a.Menu_id 
-        order by substr(a.Menu_id,0,3) ASC";
+        ORDER BY 
+        SUBSTRING(a.MenuUrut, 4) + 0,
+        CASE
+                WHEN a.ParentMenu = '*' THEN a.Menu_id -- Top-level menus first
+                ELSE a.ParentMenu -- Then submenus under their respective parents
+            END,
+            CASE
+                WHEN a.ParentMenu = '*' THEN 0 -- Top-level menus first
+                ELSE SUBSTRING(a.MenuUrut, 4) + 0 -- Sort submenus numerically by Menu_id
+            END";
         $query .= "  LIMIT  $start , $limit ";
         $data = DB::select($query);
 

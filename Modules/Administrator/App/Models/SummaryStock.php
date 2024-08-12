@@ -36,10 +36,14 @@ class SummaryStock extends Model
         $sidx = $req->input('sidx', 'id');
         $sord = $req->input('sord', 'asc');
         $start = ($page - 1) * $limit;
-
+        $custId = session()->get("customers_id")  == "*" ? null : session()->get("customers_id");
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM vw_tbl_control_stock  ";
-
+        if ($custId != null) {
+            $qry .= " WHERE customers_id = '$custId' ";
+        } else {
+            $qry .= " WHERE customers_id !='$custId' ";
+        }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
 
@@ -51,7 +55,16 @@ class SummaryStock extends Model
         }
 
         // Fetch data using DB::raw
-        $query = "SELECT * FROM vw_tbl_control_stock ORDER BY updated_at DESC LIMIT  $start , $limit  ";
+        $query = "SELECT * FROM vw_tbl_control_stock";
+        if ($custId != null) {
+            $query .= " WHERE customers_id = '$custId' ";
+        } else {
+            $query .= " WHERE customers_id !='$custId' ";
+        }
+
+        $query .= " ORDER BY updated_at DESC LIMIT  $start , $limit  ";
+
+
 
         $data = DB::select($query);
 

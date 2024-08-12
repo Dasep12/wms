@@ -68,6 +68,7 @@ class Warehouse extends Model
             $rows[] = [
                 'id'                 => $item->id,
                 'NameWarehouse'      => $item->NameWarehouse,
+                'Address'            => $item->Address,
                 'Area'               => $item->Area,
                 'status_warehouse'   => $item->status_warehouse,
                 'created_at'         => $item->created_at,

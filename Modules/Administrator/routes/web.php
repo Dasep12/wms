@@ -117,6 +117,7 @@ Route::group(['prefix' => 'administrator'], function () {
     Route::get('jsonSummary', 'SummaryController@jsonSummary');
     Route::get('jsonDetailSummary', 'SummaryController@jsonDetailSummary');
 
+
     // ROLES ROUTES 
     Route::get('roles', 'RolesController@index');
     Route::get('jsonRole', 'RolesController@jsonRole');

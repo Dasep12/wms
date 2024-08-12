@@ -57,7 +57,7 @@ class Users extends Model
 
         // Fetch data using DB::raw
         $query = "SELECT a.* , b.roleName from tbl_mst_users a
-                left join tbl_mst_role b on b.id  = a.role_id  WHERE b.roleName != 'Developer'";
+                left join tbl_mst_role b on b.id  = a.role_id  ";
         if ($req->search) {
             $query .= "  AND username='$req->search' ";
         }
@@ -121,7 +121,7 @@ class Users extends Model
         }
 
         // Fetch data using DB::raw
-        $query = "SELECT X.id id_accessMenu ,  a.Menu_id, a.MenuName , a.MenuIcon , a.MenuLevel , a.LevelNumber , IFNULL(X.enable_menu,0)enable_menu ,
+        $query = "SELECT X.id id_accessMenu , a.Menu_id, a.MenuName , a.MenuIcon , a.MenuLevel , a.LevelNumber , IFNULL(X.enable_menu,0)enable_menu ,
            IFNULL(Y.add,0) addMenu , IFNULL(Y.edit,0) editMenu , IFNULL(Y.delete,0) deleteMenu
             from tbl_sys_menu a
             left outer join (
@@ -132,7 +132,16 @@ class Users extends Model
             select tsa.accessmenu_id,tsa.add , tsa.edit , tsa.delete from tbl_sys_accesmenu tsa
             where user_id = '" . $req->user_id . "'
             )Y on Y.accessmenu_id = X.id 
-            order by cast(substring(a.Menu_id,4,3) as int )  asc ";
+            ORDER BY 
+            SUBSTRING(a.MenuUrut, 4) + 0,
+            CASE
+                WHEN a.ParentMenu = '*' 
+                ELSE a.ParentMenu 
+            END,
+            CASE
+                WHEN a.ParentMenu = '*' THEN 0 
+                ELSE SUBSTRING(a.MenuUrut, 4) + 0 
+            END";
         $query .= "  LIMIT  $start , $limit ";
         $data = DB::select($query);
 

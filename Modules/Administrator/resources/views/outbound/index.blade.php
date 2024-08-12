@@ -14,12 +14,12 @@
                 <h2>Outbound</h2>
 
                 <div class="nav navbar-right panel_toolbox">
-                    <!-- <div class="input-group">
-                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Customers..">
+                    <div class="input-group">
+                        <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search DN Number..">
                         <span class="input-group-btn">
                             <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -94,7 +94,7 @@
                     formatter: function(cellvalue, options, rowObject) {
                         var lock = rowObject.status == "open" ? '' : "disabled";
                         var btnid = rowObject.id;
-                        return `<a  href="{{ url("administrator/jsonSuratJalanOutbound") }}?id=${ btnid }" data-id="${btnid}"  class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-file-pdf-o"></i></a>`
+                        return `<a target="_blank" href="{{ url("administrator/jsonSuratJalanOutbound") }}?id=${ btnid }" data-id="${btnid}"  class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-file-pdf-o"></i></a>`
                     }
                 }, {
                     label: 'Action',
@@ -128,16 +128,16 @@
                     align: 'center',
                     hidden: true
                 }, {
-                    label: 'DN',
+                    label: 'NO.SJ',
                     name: 'no_surat_jalan',
                     align: 'center',
                     width: 90,
                 }, {
-                    label: 'No Ref',
+                    label: 'DN Number',
                     name: 'no_reference',
                     align: 'center',
                     width: 60,
-                    hidden: true
+                    hidden: false
                 }, {
                     label: 'Driver',
                     name: 'driver',
@@ -387,7 +387,7 @@
         $("#driver").val(driver);
         $("#no_truck").val(no_truck);
         $("#no_surat_jalan").val(no_surat_jalan);
-        // $("#no_reference").val(no_reference);
+        $("#no_reference").val(no_reference);
         $("#date_trans").val(date_trans);
         $("#date_transs").val(date_transs);
         $("#id").val(idx)

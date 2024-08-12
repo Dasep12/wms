@@ -128,7 +128,7 @@
                     align: 'center',
                     hidden: true
                 }, {
-                    label: 'DN',
+                    label: 'No.SJ',
                     name: 'no_surat_jalan',
                     align: 'center',
                     width: 50,
@@ -137,7 +137,7 @@
                     name: 'no_reference',
                     align: 'center',
                     width: 60,
-                    hidden: true
+                    hidden: false
                 }, {
                     label: 'Driver',
                     name: 'driver',
@@ -206,6 +206,9 @@
 
             subGridRowExpanded: loadDetailMaterial
         });
+
+
+
 
         function loadDetailMaterial(subgrid_id, row_id) {
             // Function to load subgrid data
@@ -300,7 +303,19 @@
 
 
 
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
 
 
@@ -388,8 +403,8 @@
         $("#driver").val(driver);
         $("#no_truck").val(no_truck);
         $("#no_surat_jalan").val(no_surat_jalan);
-        // $("#no_reference").val(no_reference);
-        $("#date_trans").val(date_trans);
+        $("#no_reference").val(no_reference);
+        $("#date_trans").val(formatDate(date_trans));
         $("#id").val(idx)
 
 

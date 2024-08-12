@@ -299,6 +299,7 @@
                 $("#code_unit").val(res.code_unit)
                 $("#code_unit").val(res.code_unit)
                 $("#unit_level").val(res.unit_level)
+                $("#remarks").val(res.remarks)
                 $("#parent_id").val(res.parent_id).trigger('change')
                 res.status_unit == 1 ? $('#status_unit').prop('checked', true) : $('#status_unit').prop('checked', false);
                 $("#id").val(res.id)

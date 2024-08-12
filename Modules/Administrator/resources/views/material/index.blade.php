@@ -7,7 +7,7 @@
     <div class="col-md-12 col-sm-12  ">
         <div class="x_panel">
             <div class="x_title">
-                <h2>Material</h2>
+                <h2>Material </h2>
                 <div class="nav navbar-right panel_toolbox">
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Material..">
@@ -66,7 +66,7 @@
             datatype: "json",
             mtype: "GET",
             postData: {
-                id: "1",
+                customers_id: "",
                 "_token": "{{ csrf_token() }}",
             },
             colModel: [{

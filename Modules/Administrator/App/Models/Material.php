@@ -41,20 +41,27 @@ class Material extends Model
         $sidx = $req->input('sidx', 'id');
         $sord = $req->input('sord', 'asc');
         $start = ($page - 1) * $limit;
-
+        $custId = session()->get("customers_id")  == "*" ? null : session()->get("customers_id");
         $qry = "SELECT COUNT(1) AS count 
                 FROM tbl_mst_material a 
                 left join tbl_mst_units b on b.id = a.unit_id   
                 left join tbl_mst_units d on b.id = a.parentUnitId   
                 left join tbl_mst_customers c on c.id  = a.customers_id
                 left join tbl_mst_locationwarehouse f on f.id = a.location_id
-                left join tbl_mst_packaging e on e.id = a.packaging_id";
+                left join tbl_mst_packaging e on e.id = a.packaging_id 
+              ";
+
+        if ($custId != null) {
+            $qry .= " WHERE customers_id = '$custId' ";
+        } else {
+            $qry .= " WHERE customers_id !='$custId' ";
+        }
         if ($req->customers_id) {
-            $qry .= " WHERE customers_id='$req->customers_id'  and status_material= 1 ";
+            $qry .= " AND customers_id='$req->customers_id'  and status_material= 1 ";
         }
 
         if ($req->search) {
-            $qry .= " WHERE name_material='$req->search' ";
+            $qry .= " AND name_material='$req->search' ";
         }
         // Total count of records
         $countResult = DB::select($qry);
@@ -74,10 +81,19 @@ class Material extends Model
                 left join tbl_mst_units d on d.id = a.parentUnitId   
                 left join tbl_mst_packaging e on e.id = a.packaging_id
                 left join tbl_mst_locationwarehouse f on f.id = a.location_id
-                left join tbl_mst_customers c on c.id  = a.customers_id ";
-        if ($req->search) {
-            $query .= " WHERE name_material='$req->search' ";
+                left join tbl_mst_customers c on c.id  = a.customers_id 
+                ";
+
+        if ($custId != null) {
+            $query .= " WHERE customers_id = '$custId' ";
+        } else {
+            $query .= " WHERE customers_id !='$custId' ";
         }
+        if ($req->search) {
+            $query .= " AND name_material='$req->search' ";
+        }
+
+
 
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

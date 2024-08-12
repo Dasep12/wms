@@ -118,13 +118,15 @@
                 name: 'addMenu',
                 align: 'center',
                 formatter: function(value, opt, row) {
-                    var isChecked = row.addMenu == 1 ? 'checked' : '';
-                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
+                    var isChecked, disabled;
+                    if ($("#CrudUsersAction").val() == "create") {
+                        isChecked = row.addMenu === 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : 'checked';
                     } else {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : ''
+                        isChecked = row.addMenu == 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : '';
                     }
-                    return `<input ${ disabled } class="add-target-${ row.id_accessMenu }" name="addMenu[]" role='addMenu' value="${row.id_accessMenu }" type="checkbox" ${ isChecked } >`;
+                    return `<input class="add-target-${ row.id_accessMenu }" name="addMenu[]" role='addMenu' ${isChecked} ${disabled} value="${row.id_accessMenu }" type="checkbox"  >`;
                 },
                 width: 13
             }, {
@@ -132,12 +134,14 @@
                 name: 'editMenu',
                 align: 'center',
                 formatter: function(value, opt, row) {
-                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
+                    var isChecked, disabled;
+                    if ($("#CrudUsersAction").val() == "create") {
+                        isChecked = row.editMenu === 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : 'checked';
                     } else {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : ''
+                        isChecked = row.editMenu == 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : '';
                     }
-                    var isChecked = row.editMenu == 1 ? 'checked' : '';
                     return `<input ${ disabled } name="editMenu[]" value="${row.id_accessMenu }" type="checkbox" ${ isChecked }   >`;
                 },
                 width: 13
@@ -146,12 +150,14 @@
                 name: 'deleteMenu',
                 align: 'center',
                 formatter: function(value, opt, row) {
-                    if ($("#CrudUsersAction").val() == "create" || $("#CrudUsersAction").val() == "update") {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : 'checked'
+                    var isChecked, disabled;
+                    if ($("#CrudUsersAction").val() == "create") {
+                        isChecked = row.deleteMenu === 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : 'checked';
                     } else {
-                        var disabled = row.statsMenu != 1 ? 'disabled' : ''
+                        isChecked = row.deleteMenu == 1 ? 'checked' : '';
+                        disabled = row.statsMenu != 1 ? 'disabled' : '';
                     }
-                    var isChecked = row.deleteMenu == 1 ? 'checked' : '';
                     return `<input ${ disabled } name="deleteMenu[]" value="${row.id_accessMenu }" type="checkbox" ${ isChecked }   >`;
                 },
                 width: 13
@@ -183,13 +189,10 @@
             pager: "#pagerModal",
             loadComplete: function() {
                 var $grid = $("#jqGridMainModal");
-
-
                 $grid.find("input[type='checkbox'][role='showMenu']").each(function() {
                     var isChecked = this.checked;
                     this.checked = isChecked;
                     this.disabled = this.value != "1";
-
                 });
 
             }
@@ -277,7 +280,6 @@
                 data: formData,
                 async: false,
                 success: function(data) {
-                    console.log(data);
                     if (data.msg == "success") {
                         $('#modalCrudUsers').modal('hide');
                         var act = $("#CrudUsersAction").val();

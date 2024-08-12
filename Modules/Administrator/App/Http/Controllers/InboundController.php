@@ -62,7 +62,7 @@ class InboundController extends Controller
 
         $dataHeader = [
             'customer_id'       => $req->customer_id,
-            // 'no_reference'      => $req->no_reference,
+            'no_reference'      => $req->no_reference,
             'no_surat_jalan'    => $req->no_surat_jalan,
             'ship_to'           => $req->ship_to,
             'driver'            => $req->driver,
@@ -160,20 +160,23 @@ class InboundController extends Controller
         $existingIdInDB = array_filter(array_column($listIdDetail, 'detail_id'));
         DB::beginTransaction();
         try {
-            $dates = DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
+            date_default_timezone_set('Asia/Jakarta');
+            // $dates =  date("Y-m-d H:i:s", strtotime($req->date_trans));
+            //DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
             $dataHeader = [
                 'customer_id'       => $req->customer_id,
-                // 'no_reference'      => $req->no_reference,
+                'no_reference'      => $req->no_reference,
                 'no_surat_jalan'    => $req->no_surat_jalan,
                 'ship_to'           => $req->ship_to,
                 'driver'            => $req->driver,
                 'no_truck'          => $req->no_truck,
-                'date_trans'        => $dates->format('Y-m-d H:i:s'),
+                'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
                 'date_in'           => $req->date_in,
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',
                 'types'             => 'in',
-                'updated_at'        => session()->get("user_id")
+                'updated_at'        => date('Y-m-d H:i:s'),
+                'updated_by'        => session()->get("user_id")
             ];
             DB::table("tbl_trn_shipingmaterial")->where('id', $headersId)->update($dataHeader);
             DB::table('tbl_trn_detailshipingmaterial')->whereIn('id', $existingIdInDB)->delete();

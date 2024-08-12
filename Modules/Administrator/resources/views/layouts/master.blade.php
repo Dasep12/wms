@@ -12,7 +12,7 @@ $MenuUrl = "";
             <div class="col-md-3 left_col menu_fixed">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title justify-content-center" style="border: 0;">
-                        <img style="width: 60%;height: 50px !important;" src="{{ asset('assets/images/logo-rim.jpg') }}" alt="..." class=" profile_img">
+                        <img style="width: 60%;height: 50px !important;" src="{{ asset('assets/images/rim_logo_rev.png') }}" alt="..." class=" profile_img">
                     </div>
 
                     <div class="clearfix"></div>

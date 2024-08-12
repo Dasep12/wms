@@ -66,11 +66,22 @@ class RolesController extends Controller
                     'enable_menu' => in_array($allMenus[$key], $checked, true),
                     'role_id' => $req->id,
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'updated_by' => session()->get("user_id")
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_by' => session()->get("user_id"),
+                    'created_by' => session()->get("user_id")
                 );
-                DB::table("tbl_sys_roleaccessmenu")
-                    ->where(["role_id" => $req->id, "menu_id" => $allMenus[$key]])
-                    ->update($data);
+
+                $find = DB::table("tbl_sys_roleaccessmenu")
+                    ->where(['role_id' =>  $req->id, "menu_id" => $allMenus[$key]])
+                    ->get();
+                if (count($find) <= 0) {
+                    DB::table("tbl_sys_roleaccessmenu")
+                        ->insert($data);
+                } else {
+                    DB::table("tbl_sys_roleaccessmenu")
+                        ->where(["role_id" => $req->id, "menu_id" => $allMenus[$key]])
+                        ->update($data);
+                }
             }
 
             $cust->save();
@@ -94,8 +105,9 @@ class RolesController extends Controller
 
     public function jsonForListRoles(Request $request)
     {
+        // where('roleName', '!=', 'Developer')->
         $query = $request->get('q');
-        $results = Roles::where('roleName', '!=', 'Developer')->get(['id', 'roleName']);
+        $results = Roles::get(['id', 'roleName']);
         return response()->json($results, 200);
     }
 }
