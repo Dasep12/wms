@@ -59,9 +59,10 @@ class UsersController extends Controller
             $cust->email = $req->email;
             $cust->role_id = $req->role_id;
             $cust->customers_id = $req->customers_id;
+            $cust->password = $req->password;
             $cust->status_user = $req->status_user == null ? 0 : 1;
             $cust->updated_at = date('Y-m-d H:i:s');
-            $cust->updated_by = 1;
+            $cust->updated_by = session()->get("user_id");
 
             // add new roles 
             $menuItems = [];

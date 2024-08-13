@@ -135,7 +135,7 @@ class Users extends Model
             ORDER BY 
             SUBSTRING(a.MenuUrut, 4) + 0,
             CASE
-                WHEN a.ParentMenu = '*' 
+                WHEN a.ParentMenu = '*' THEN a.Menu_id
                 ELSE a.ParentMenu 
             END,
             CASE

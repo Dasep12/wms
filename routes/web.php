@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DenyController;
 use App\Http\Controllers\LogoutController;
 use Illuminate\Support\Facades\Route;
 /*
@@ -18,6 +19,11 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [AuthController::class, 'index']);
+
+Route::middleware('check.sessionLogin')->prefix('/')->group(function () {
+    Route::get('/', [AuthController::class, 'index']);
+});
+
+Route::get('/deny', [DenyController::class, 'index'])->middleware('check.session');
 Route::post('/auth', [AuthController::class, 'Auth']);
 Route::get('/logout', [LogoutController::class, 'index']);

@@ -14,11 +14,11 @@ use Modules\Administrator\App\Http\Controllers\AdministratorController;
 |
 */
 
-Route::group(['prefix' => 'administrator'], function () {
+Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator')->group(function () {
 
     // DASHBOARD ROUTES 
     Route::get('dashboard', 'DashboardController@index');
-
+    // ->middleware('check.session')
 
     // UNITS ROUTES 
     Route::get('units', 'UnitsController@index');
