@@ -38,7 +38,7 @@ $MenuUrl = "";
 
                     <!-- /menu footer buttons -->
                     <div class="sidebar-footer hidden-small">
-                        <a data-toggle="tooltip" data-placement="top" title="Settings">
+                        <!-- <a data-toggle="tooltip" data-placement="top" title="Settings">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="FullScreen">
@@ -49,7 +49,7 @@ $MenuUrl = "";
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
                             <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                        </a>
+                        </a> -->
                     </div>
                     <!-- /menu footer buttons -->
                 </div>
@@ -65,10 +65,10 @@ $MenuUrl = "";
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('assets/images/user_2.png') }}" alt="">{{ session()->get("fullname") }}
+                                    <img src="{{ asset('assets/images/user_2.png') }}" alt="">{{ ucwords(strtolower(session()->get("fullname"))) }}
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#"> Profile</a>
+                                    <!-- <a class="dropdown-item" href="#"> Profile</a> -->
                                     <a class="dropdown-item" href="{{ url('logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
                             </li>
@@ -90,7 +90,7 @@ $MenuUrl = "";
             <!-- footer content -->
             <footer>
                 <div class="pull-right">
-                    WAREHOUSE MANAJEMEN SYSTEM || <a href="#">BONECOM TRICOM</a>
+                    WAREHOUSE MANAJEMEN SYSTEM || <a href="#">RIM</a>
                 </div>
                 <div class="clearfix"></div>
             </footer>

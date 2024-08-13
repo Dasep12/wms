@@ -18,7 +18,11 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
 
     // DASHBOARD ROUTES 
     Route::get('dashboard', 'DashboardController@index');
-    // ->middleware('check.session')
+    Route::get('countCustomers', 'DashboardController@countCustomers');
+    Route::get('countMaterial', 'DashboardController@countMaterial');
+    Route::get('countInbound', 'DashboardController@countInbound');
+    Route::get('countOutbound', 'DashboardController@countOutbound');
+    Route::get('countAdjust', 'DashboardController@countAdjust');
 
     // UNITS ROUTES 
     Route::get('units', 'UnitsController@index');

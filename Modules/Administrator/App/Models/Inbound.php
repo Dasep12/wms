@@ -16,8 +16,8 @@ class Inbound extends Model
     /**
      * The attributes that are mass assignable.
      */
-    //protected $table = '';
-    //protected $primaryKey = '';
+    protected $table = 'tbl_trn_shipingmaterial';
+    protected $primaryKey = 'id';
     protected $fillable = [];
 
 
