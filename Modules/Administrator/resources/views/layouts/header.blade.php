@@ -68,11 +68,132 @@
     <!-- bootstrap-datetimepicker -->
     <script src="{{ asset('assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
 
+    <!-- highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 
     <style>
+        .loadering {
+            width: 45px;
+            aspect-ratio: 1;
+            --c: conic-gradient(from -90deg, #FFF 90deg, #0000 0);
+            background: var(--c), var(--c);
+            background-size: 40% 40%;
+            animation: l19 1s infinite alternate;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 9999;
+        }
+
+        @keyframes l19 {
+
+            0%,
+            10% {
+                background-position: 0 0, 0 calc(100%/3)
+            }
+
+            50% {
+                background-position: 0 0, calc(100%/3) calc(100%/3)
+            }
+
+            90%,
+            100% {
+                background-position: 0 0, calc(100%/3) 0
+            }
+        }
+
         /* .ui-jqgrid tr.jqgrow td {
             white-space: normal !important;
             word-wrap: break-word !important;
         } */
+        /* Full Page Loader Styles */
+        /* Absolute Center Spinner */
+
+        /* Center the loader */
+        #fullPageLoader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(55, 55, 55, 0.83);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            display: block;
+        }
+
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 9999;
+            width: 90px;
+            height: 90px;
+            margin: -76px 0 0 -76px;
+            border: 16px solid #f6efee;
+            border-radius: 50%;
+            border-top: 16px solid #137b14;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Add animation to "page content" */
+        .animate-bottom {
+            position: relative;
+            -webkit-animation-name: animatebottom;
+            -webkit-animation-duration: 1s;
+            animation-name: animatebottom;
+            animation-duration: 1s
+        }
+
+        @-webkit-keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0px;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
     </style>
 </head>

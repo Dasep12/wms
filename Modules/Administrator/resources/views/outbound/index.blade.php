@@ -17,7 +17,7 @@
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search DN Number..">
                         <span class="input-group-btn">
-                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
+                            <button onclick="search()" id="searchBtn" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
                     </div>
                 </div>
@@ -66,6 +66,14 @@
         ReloadBarang()
         $("#searching").val("")
     }
+
+    var input = document.getElementById("searching");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchBtn").click();
+        }
+    });
 </script>
 @include('administrator::outbound.partials.CrudOutbound')
 @include('administrator::outbound.partials.AddMaterial')
@@ -87,7 +95,7 @@
                     key: true,
                     hidden: true,
                 }, {
-                    label: 'Document',
+                    label: 'Doc',
                     name: 'id',
                     width: 30,
                     align: 'center',
@@ -131,7 +139,7 @@
                     label: 'NO.SJ',
                     name: 'no_surat_jalan',
                     align: 'center',
-                    width: 90,
+                    width: 100,
                 }, {
                     label: 'DN Number',
                     name: 'no_reference',
@@ -173,7 +181,7 @@
                     formatter: "date",
                     formatoptions: {
                         srcformat: "ISO8601Long",
-                        newformat: "d M Y H:i:s"
+                        newformat: "d M Y H:i"
                     }
                 }
             ],
@@ -203,8 +211,15 @@
             rowList: [10, 30, 50],
             pager: "#pager",
             subGrid: true,
-
-            subGridRowExpanded: loadDetailMaterial
+            subGridRowExpanded: loadDetailMaterial,
+            loadComplete: function(data) {
+                // $("#jqGridMain").parent().find(".no-data").remove(); // Remove the message if there is data
+                // if (data.records == 0) {
+                //     $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
+                // } else {
+                //     $("#jqGridMain").parent().find(".no-data").remove();
+                // }
+            },
         });
 
         function loadDetailMaterial(subgrid_id, row_id) {

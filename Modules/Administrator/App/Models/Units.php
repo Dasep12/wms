@@ -41,7 +41,7 @@ class Units extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM tbl_mst_units WHERE  parent_id = '$req->parent' ";
         if ($req->search) {
-            $qry .= " AND name_unit='$req->search' ";
+            $qry .= " AND name_unit LIKE '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -56,7 +56,7 @@ class Units extends Model
         // Fetch data using DB::raw
         $query = "SELECT * FROM tbl_mst_units WHERE  parent_id = '$req->parent'";
         if ($req->search) {
-            $query .= " AND name_unit='$req->search' ";
+            $query .= " AND name_unit LIKE '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

@@ -43,7 +43,7 @@ class Location extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM tbl_mst_locationwarehouse a  left join tbl_mst_warehouse b on b.id = a.warehouse_id ";
         if ($req->search) {
-            $qry .= " WHERE location='$req->search' ";
+            $qry .= " WHERE location LIKE '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -58,7 +58,7 @@ class Location extends Model
         // Fetch data using DB::raw
         $query = "SELECT a.* , b.NameWarehouse FROM tbl_mst_locationwarehouse a  left join tbl_mst_warehouse b on b.id = a.warehouse_id ";
         if ($req->search) {
-            $query .= " WHERE location='$req->search' ";
+            $query .= " WHERE location LIKE '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

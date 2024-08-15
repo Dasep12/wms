@@ -47,13 +47,14 @@ class OutboundController extends Controller
 
         $dataHeader = [
             'customer_id'       => $req->customer_id,
-            // 'no_reference'      => $req->no_reference,
+            'no_reference'      => $req->no_reference,
             'no_surat_jalan'    => $req->no_surat_jalan,
             'ship_to'           => $req->ship_to,
             'driver'            => $req->driver,
             'no_truck'          => $req->no_truck,
             'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
             'created_at'        => date('Y-m-d H:i:s'),
+            'created_by'        => session()->get("user_id"),
             'status'            => 'open',
             'types'             => 'out',
             'types_trans'       => 'Order',

@@ -70,6 +70,7 @@ class InboundController extends Controller
             'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
             'date_in'           => $req->date_in,
             'created_at'        => date('Y-m-d H:i:s'),
+            'created_by'        => session()->get("user_id"),
             'status'            => 'open',
             'types'             => 'in',
             'types_trans'       => 'Order',

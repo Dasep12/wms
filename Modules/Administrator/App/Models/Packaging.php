@@ -40,7 +40,7 @@ class Packaging extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM tbl_mst_packaging  ";
         if ($req->search) {
-            $qry .= " WHERE name_packaging='$req->search' ";
+            $qry .= " WHERE name_packaging LIKE '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -55,7 +55,7 @@ class Packaging extends Model
         // Fetch data using DB::raw
         $query = "SELECT * FROM tbl_mst_packaging ";
         if ($req->search) {
-            $query .= "WHERE AND name_packaging='$req->search' ";
+            $query .= "WHERE name_packaging LIKE '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

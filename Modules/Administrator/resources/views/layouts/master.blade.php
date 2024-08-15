@@ -5,6 +5,13 @@
 $MenuUrl = "";
 ?>
 
+<div id="fullPageLoader">
+    <!-- <div id="loader"></div> -->
+    <div class="loadering"></div>
+</div>
+<script>
+    //document.getElementById("fullPageLoader").style.display = "none";
+</script>
 
 <body class="nav-md">
     <div class="container body">
@@ -103,6 +110,7 @@ $MenuUrl = "";
 <!-- sidebar menu -->
 @include('administrator::layouts.footer')
 <!-- /sidebar menu -->
+
 
 
 </html>

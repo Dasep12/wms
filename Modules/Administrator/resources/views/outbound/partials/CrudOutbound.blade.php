@@ -26,7 +26,7 @@
                         <div class="col-md-3 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="no_surat_jalan" class="">No.SJ :</label>
-                                <input type="text" required name="no_surat_jalan" id="no_surat_jalan" class="form-control" placeholder="*Delivery Notes Number">
+                                <input type="text" required name="no_surat_jalan" id="no_surat_jalan" class="form-control" placeholder="*No.Surat Jalan">
                             </div>
                         </div>
 
@@ -87,6 +87,13 @@
                         </div>
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                         <button type="submit" class="btn btn-primary btn-sm btn-title btn-titless"></button>
+                    </div>
+                    <div class="loader" style="display: none;">
+                        <div class="col-md-12">
+                            <div style="background-color: rgba(132, 122, 42, 0.63) !important;" class="alert alert-info mt-2" role="alert">
+                                <span style="font-style: italic;">Please Wait Send Data . . .</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -371,19 +378,20 @@
         });
         $(".btn-formAddMaterial").html(`<i class="fa fa-check"></i> Select`);
         $("#jqGridListMaterial").jqGrid('setGridWidth', $(".modal-dialog").width() * 0.67); //
-        $('#modalFormAddMaterial').modal('show');
+
         $("#details_unit").attr("placeholder", "Detail Unit");
-        // if (errorCount <= 0) {
-        //     $('#modalFormAddMaterial').modal('show');
-        // } else {
-        //     var msg = `<div class="col-md-12">
-        //             <div class="alert alert-danger" role="alert">
-        //                 <span class="font-italic">Data Customers,DN Number  , Driver , Truck tidak di izinkan kosong </span>
-        //             </div>
-        //         </div>`
-        //     $("#ValidateField").html(msg);
-        //     errorCount = 0;
-        // }
+        if (errorCount <= 0) {
+            $('#modalFormAddMaterial').modal('show');
+        } else {
+            $('#modalFormAddMaterial').modal('hide');
+            var msg = `<div class="col-md-12">
+                    <div class="alert alert-danger" role="alert">
+                        <span class="font-italic">Data Customers,DN Number  , Driver , Truck lainnya tidak di izinkan kosong </span>
+                    </div>
+                </div>`
+            $("#ValidateField").html(msg);
+            errorCount = 0;
+        }
 
         $(".formAddMaterial").html()
         $(".btnFindMaterial").attr("disabled", false)
@@ -426,7 +434,7 @@
 
     $("#customer_id").change(function(e) {
         $.ajax({
-            url: "{{ url('administrator/generateDN') }}",
+            url: "{{ url('administrator/generateDNOutbound') }}",
             method: "POST",
             data: {
                 customers_id: $("#customer_id").val(),
@@ -476,6 +484,12 @@
                 method: "POST",
                 type: 'POST',
                 data: data,
+                beforeSend: function() {
+                    document.querySelector(".loader").style.display = "block";
+                },
+                complete: function() {
+                    document.querySelector(".loader").style.display = "none";
+                },
                 success: function(data) {
                     if (data.msg == "success") {
                         dataMaterialOutbound = [];
@@ -490,6 +504,7 @@
                     }
                 },
                 error: function(xhr, desc, err) {
+                    document.querySelector(".loader").style.display = "none";
                     var respText = "";
                     try {
                         respText = eval(xhr.responseText);

@@ -61,7 +61,7 @@ class Material extends Model
         }
 
         if ($req->search) {
-            $qry .= " AND name_material='$req->search' ";
+            $qry .= " AND name_material LIKE '%$req->search%' ";
         }
         // Total count of records
         $countResult = DB::select($qry);
@@ -90,7 +90,7 @@ class Material extends Model
             $query .= " WHERE customers_id !='$custId' ";
         }
         if ($req->search) {
-            $query .= " AND name_material='$req->search' ";
+            $query .= " AND  name_material LIKE '%$req->search%'  ";
         }
 
 

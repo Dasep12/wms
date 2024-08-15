@@ -33,7 +33,7 @@ class Adjustment extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM vw_tbl_adjust  ";
         if ($req->search) {
-            $qry .= " WHERE no_reference='$req->search' ";
+            $qry .= " WHERE no_surat_jalan like '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -48,7 +48,7 @@ class Adjustment extends Model
         // Fetch data using DB::raw
         $query = "SELECT * FROM vw_tbl_adjust  ";
         if ($req->search) {
-            $query .= " WHERE no_reference='$req->search' ";
+            $query .= " WHERE no_surat_jalan like '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

@@ -42,7 +42,7 @@ class Warehouse extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM tbl_mst_warehouse ";
         if ($req->search) {
-            $qry .= " WHERE NameWarehouse='$req->search' ";
+            $qry .= " WHERE NameWarehouse like '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -57,7 +57,7 @@ class Warehouse extends Model
         // Fetch data using DB::raw
         $query = "SELECT * FROM tbl_mst_warehouse";
         if ($req->search) {
-            $query .= " WHERE NameWarehouse='$req->search' ";
+            $query .= " WHERE NameWarehouse like '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);

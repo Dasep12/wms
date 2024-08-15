@@ -10,7 +10,7 @@
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Username ...">
                         <span class="input-group-btn">
-                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
+                            <button onclick="search()" id="searchBtn" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
                     </div>
                 </div>
@@ -59,9 +59,17 @@
     }
 
     function search() {
-        ReloadBarang()
+        Reload()
         $("#searching").val("")
     }
+
+    var input = document.getElementById("searching");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchBtn").click();
+        }
+    });
 </script>
 @include('administrator::users.partials.CrudUsers')
 <script>
@@ -167,7 +175,13 @@
             height: 350,
             rowNum: 10,
             rowList: [10, 30, 50],
-            pager: "#pager"
+            pager: "#pager",
+            loadComplete: function(data) {
+                $("#jqGridMain").parent().find(".no-data").remove(); // Remove the message if there is data
+                if (data.records == 0) {
+                    $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
+                }
+            },
         });
 
         function actionBarangFormatter(cellvalue, options, rowObject) {

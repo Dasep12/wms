@@ -23,6 +23,7 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::get('countInbound', 'DashboardController@countInbound');
     Route::get('countOutbound', 'DashboardController@countOutbound');
     Route::get('countAdjust', 'DashboardController@countAdjust');
+    Route::get('jsonGraph', 'DashboardController@jsonGraph');
 
     // UNITS ROUTES 
     Route::get('units', 'UnitsController@index');
@@ -113,7 +114,7 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::post('jsonPutawayOutbound', 'OutboundController@jsonPutawayOutbound');
     Route::get('jsonStockListMaterialByCustomers', 'OutboundController@jsonStockListMaterialByCustomers');
     Route::get('jsonSuratJalanOutbound', 'OutboundController@jsonSuratJalanOutbound');
-    Route::post('generateDN', 'OutboundController@generateDN');
+    Route::post('generateDNOutbound', 'OutboundController@generateDN');
 
 
     // MATERIAL SUMMARY 

@@ -40,7 +40,7 @@ class Roles extends Model
         // Total count of records
         $qry = "SELECT COUNT(1) AS count FROM tbl_mst_role WHERE  roleName != 'Developer'";
         if ($req->search) {
-            $qry .= " AND roleName='$req->search' ";
+            $qry .= " AND roleName like '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -63,13 +63,15 @@ class Roles extends Model
         where tsr.enable_menu = 1 
         group by tsm.MenuName , tsr.role_id , tsm.Menu_id
         order by cast(substring(tsm.menu_id,4,3)as int ) asc  
-        )X on a.id  = X.role_id 
-        -- WHERE roleName != 'Developer'
-        GROUP BY a.id, 
-        a.roleName, a.code_role , a.status_role , a.created_at,a.created_by , a.updated_by , a.updated_at  ";
+        )X on a.id  = X.role_id
+        WHERE roleName != 'Developer' 
+        ";
         if ($req->search) {
-            $query .= " AND roleName='$req->search' ";
+            $query .= " AND roleName like '%$req->search%' ";
         }
+        $query .= "GROUP BY a.id, 
+        a.roleName, a.code_role , a.status_role , a.created_at,a.created_by , a.updated_by , a.updated_at  ";
+
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);
 

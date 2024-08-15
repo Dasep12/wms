@@ -25,4 +25,11 @@
 
         return true;
     }
+
+    $(window).on('load', function() {
+        // Hide the loader
+        $('#fullPageLoader').fadeOut('slow', function() {
+
+        });
+    });
 </script>

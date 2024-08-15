@@ -71,4 +71,53 @@ class DashboardController extends Controller
         }
         return response()->json(['data' => $data]);
     }
+
+    public function jsonGraph(Request $req)
+    {
+        $cust = "";
+        if ($req->customers) {
+            $cust .= " AND customer_id = $req->customers ";
+        }
+        $sql = "WITH RECURSIVE DateRange AS (
+                SELECT '$req->startDate' AS Date
+                UNION ALL
+                SELECT Date + INTERVAL 1 DAY
+                FROM DateRange
+                WHERE Date < '$req->endDate')
+                SELECT Date , coalesce(X.res,0)total_in,coalesce(Y.res,0)total_out
+                FROM DateRange
+                left join(
+                    select count(id) res,date_format(date_trans,'%Y-%m-%d')dates 
+                    from tbl_trn_shipingmaterial 
+                    where types in ('in') and types_trans in ('Order')
+                    $cust 
+                    group by types, types_trans , date_trans
+                )X on X.dates = Date 
+                left join(
+                    select count(id) res,date_format(date_trans,'%Y-%m-%d')dates 
+                    from tbl_trn_shipingmaterial 
+                    where types in ('out') and types_trans in ('Order')
+                    $cust 
+                    group by types, types_trans , date_trans
+                )Y on X.dates = Date 
+                order by Date ASC   ";
+        $query = DB::select($sql);
+        $data = [];
+        $label = ["Inbound", "Outbound"];
+        $inboundArray = [];
+        $outboundArray = [];
+        foreach ($query as $q) {
+            $inboundArray[] = $q->total_in;
+            $outboundArray[] = $q->total_out;
+        }
+
+        $data[] = array(
+            'label_in' => $label[0],
+            'label_out' => $label[1],
+            'data_in' => $inboundArray,
+            'data_out' => $outboundArray,
+        );
+
+        return response()->json($data);
+    }
 }

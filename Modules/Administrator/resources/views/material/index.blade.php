@@ -12,7 +12,7 @@
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Material..">
                         <span class="input-group-btn">
-                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
+                            <button onclick="search()" id="searchBtn" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
                     </div>
                 </div>
@@ -56,6 +56,14 @@
         ReloadBarang()
         $("#searching").val("")
     }
+
+    var input = document.getElementById("searching");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchBtn").click();
+        }
+    });
 </script>
 @include('administrator::material.partials.CrudMaterial')
 <script>
@@ -160,8 +168,12 @@
             autowidth: true,
             shrinkToFit: false,
             fromServer: true,
-            loadComplete: function() {
+            loadComplete: function(data) {
                 $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
+                $("#jqGridMain").parent().find(".no-data").remove(); // Remove the message if there is data
+                if (data.records === 0) {
+                    $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
+                }
             }
         });
 

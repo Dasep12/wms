@@ -43,7 +43,7 @@ class Users extends Model
         $qry = "SELECT COUNT(a.id) AS count from tbl_mst_users a
         left join tbl_mst_role b on b.id  = a.role_id WHERE b.roleName != 'Developer' ";
         if ($req->search) {
-            $qry .= " AND username='$req->search' ";
+            $qry .= " AND username like '%$req->search%' ";
         }
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -57,9 +57,9 @@ class Users extends Model
 
         // Fetch data using DB::raw
         $query = "SELECT a.* , b.roleName from tbl_mst_users a
-                left join tbl_mst_role b on b.id  = a.role_id  ";
+                left join tbl_mst_role b on b.id  = a.role_id  WHERE b.roleName != 'Developer'";
         if ($req->search) {
-            $query .= "  AND username='$req->search' ";
+            $query .= "  AND username like '%$req->search%' ";
         }
         $query .= " ORDER BY  id  DESC  LIMIT  $start , $limit ";
         $data = DB::select($query);
@@ -190,9 +190,9 @@ class Users extends Model
                     'phone'             => $req->phone,
                     'status_user'       => $req->status_user == null ? 0 : 1,
                     'created_at'        => date('Y-m-d H:i:s'),
-                    'created_by'        => 1,
+                    'created_by'        => session()->get("user_id"),
                     'updated_at'        => date('Y-m-d H:i:s'),
-                    'updated_by'        => 1,
+                    'updated_by'        => session()->get("user_id"),
                 ]);
             $lastId  = DB::getPdo()->lastInsertId();
             $menuItems = [];
@@ -208,10 +208,11 @@ class Users extends Model
                     'edit' => $checkedEditMenu != null ? in_array($allMenus[$key], $checkedEditMenu, true) : 0,
                     'delete' => $checkedEditMenu != null ? in_array($allMenus[$key], $checkedDeleteMenu, true) : 0,
                     'created_at' => date('Y-m-d H:i:s'),
-                    'created_by' => 1
+                    'created_by' => session()->get("user_id")
                 );
                 array_push($menuItems, $data);
             }
+
             DB::table("tbl_sys_accesmenu")
                 ->insert($menuItems);
             try {

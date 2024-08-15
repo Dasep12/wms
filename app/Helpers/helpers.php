@@ -8,10 +8,10 @@ function getSuratJalanNumber($idCustomers)
     if ($idCustomers) {
         $data =  DB::select("SELECT max(substr(tts.no_surat_jalan,1,4)) noUrut  
         from  tbl_trn_shipingmaterial tts
-        where types ='out' and tts.customer_id  = $idCustomers ");
+        where types in ('out') and types_trans in ('Order') and tts.customer_id  = $idCustomers  and date_format(date_trans,'%Y-%m')= '" . date('Y-m') . "' ");
         $cust  = Customers::find($idCustomers);
-
-        if ($data[0]->noUrut) {
+        // dd($data);
+        if ($data[0]->noUrut != null) {
             $increase =  $data[0]->noUrut + 1;
             $str_dn_ = str_pad($increase, 4, 0, STR_PAD_LEFT);
             $DN =  $str_dn_ . '/' . "SJ/" . 'RIM/' . $cust->code_customers . '/' . getRomawiMonth((int) date('m')) . '/' . date('Y');

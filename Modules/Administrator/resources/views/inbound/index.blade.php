@@ -17,7 +17,7 @@
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search DN..">
                         <span class="input-group-btn">
-                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
+                            <button onclick="search()" id="searchBtn" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
                     </div>
                 </div>
@@ -66,6 +66,14 @@
         ReloadBarang()
         $("#searching").val("")
     }
+
+    var input = document.getElementById("searching");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchBtn").click();
+        }
+    });
 </script>
 @include('administrator::inbound.partials.CrudInbound')
 @include('administrator::inbound.partials.AddMaterial')
@@ -89,7 +97,7 @@
                 }, {
                     label: 'Putaway',
                     name: 'id',
-                    width: 30,
+                    width: 50,
                     align: 'center',
                     formatter: function(cellvalue, options, rowObject) {
                         var lock = rowObject.status == "open" ? '' : "disabled";
@@ -100,7 +108,7 @@
                     label: 'Action',
                     name: 'id',
                     align: 'center',
-                    width: 40,
+                    width: 45,
                     formatter: actionBarangFormatter
                 }, {
                     label: 'Status',
@@ -131,12 +139,12 @@
                     label: 'No.SJ',
                     name: 'no_surat_jalan',
                     align: 'center',
-                    width: 50,
+                    width: 110,
                 }, {
-                    label: 'No Ref',
+                    label: 'DN',
                     name: 'no_reference',
                     align: 'center',
-                    width: 60,
+                    width: 90,
                     hidden: false
                 }, {
                     label: 'Driver',
@@ -173,7 +181,7 @@
                     formatter: "date",
                     formatoptions: {
                         srcformat: "ISO8601Long",
-                        newformat: "d M Y H:i:s"
+                        newformat: "d M Y H:i"
                     }
                 }
             ],
@@ -203,8 +211,13 @@
             rowList: [10, 30, 50],
             pager: "#pager",
             subGrid: true,
-
-            subGridRowExpanded: loadDetailMaterial
+            subGridRowExpanded: loadDetailMaterial,
+            loadComplete: function(data) {
+                $("#jqGridMain").parent().find(".no-data").remove(); // Remove the message if there is data
+                if (data.records === 0) {
+                    $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
+                }
+            },
         });
 
 

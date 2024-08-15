@@ -87,6 +87,13 @@
                         <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                         <button type="submit" class="btn btn-primary btn-sm btn-title btn-titless"></button>
                     </div>
+                    <div class="loader" style="display: none;">
+                        <div class="col-md-12">
+                            <div style="background-color: rgba(132, 122, 42, 0.63) !important;" class="alert alert-info mt-2" role="alert">
+                                <span style="font-style: italic;">Please Wait Send Data . . .</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
 
@@ -415,6 +422,12 @@
                 method: "POST",
                 type: 'POST',
                 data: data,
+                beforeSend: function() {
+                    document.querySelector(".loader").style.display = "block";
+                },
+                complete: function() {
+                    document.querySelector(".loader").style.display = "none";
+                },
                 success: function(data) {
                     console.log(data);
                     if (data.msg == "success") {
@@ -429,6 +442,7 @@
                     }
                 },
                 error: function(xhr, desc, err) {
+                    document.querySelector(".loader").style.display = "none";
                     var respText = "";
                     try {
                         respText = eval(xhr.responseText);
