@@ -45,7 +45,7 @@ class DashboardController extends Controller
     public function countInbound()
     {
         if (session()->get("customers_id") != "*") {
-            $data = Inbound::where(['customers_id' => session()->get("customers_id"), 'types' => 'in', 'types_trans' => 'Order'])->count();
+            $data = Inbound::where(['customer_id' => session()->get("customers_id"), 'types' => 'in', 'types_trans' => 'Order'])->count();
         } else {
             $data = Inbound::where(['types' => 'in', 'types_trans' => 'Order'])->count();
         }
@@ -55,7 +55,7 @@ class DashboardController extends Controller
     public function countOutbound()
     {
         if (session()->get("customers_id") != "*") {
-            $data = Inbound::where(['customers_id' => session()->get("customers_id"), 'types' => 'out', 'types_trans' => 'Order'])->count();
+            $data = Inbound::where(['customer_id' => session()->get("customers_id"), 'types' => 'out', 'types_trans' => 'Order'])->count();
         } else {
             $data = Inbound::where(['types' => 'out', 'types_trans' => 'Order'])->count();
         }

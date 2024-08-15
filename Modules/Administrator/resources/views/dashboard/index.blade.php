@@ -203,9 +203,19 @@
                 success: function(data) {
                     var $select = $('#customer_id');
                     $select.empty();
-                    $select.append('<option value="">*Choose Customers</option>');
+                    var sessCustomers = "{{ session()->get('customers_id') }}";
+                    if (sessCustomers == "*") {
+                        $select.append('<option value="">*Choose Customers</option>');
+                    }
                     $.each(data, function(index, option) {
-                        $select.append('<option value="' + option.id + '">' + option.name_customers + '</option>');
+                        if (option.id == sessCustomers) {
+                            // Stop the loop when the value is the same as targetValue
+                            $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
+                            return false;
+                        } else {
+                            $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
+                        }
+
                     });
                 }
             });
@@ -228,8 +238,6 @@
             endDate: moment().endOf('month'),
         });
 
-
-
         $('#daterange').on('apply.daterangepicker', function(ev, picker) {
             var startDate = picker.startDate.format('MMMM DD, YYYY');
             var endDate = picker.endDate.format('MMMM DD, YYYY');
@@ -237,12 +245,14 @@
             updateGraph()
         });
 
+        $("#customer_id").change(function() {
+            updateGraph()
+        })
         // Get the start and end dates of the current month
         var startDateLabel = moment().startOf('month').format('MMMM DD, YYYY');
         var endDateLabel = moment().endOf('month').format('MMMM DD, YYYY');
         $("#datesLabel").html(`${ startDateLabel } - ${ endDateLabel }`);
 
-        // Data retrieved https://en.wikipedia.org/wiki/List_of_cities_by_average_temperature
         var graph = Highcharts.chart('container', {
             chart: {
                 type: 'spline'
@@ -264,7 +274,7 @@
                     text: ''
                 },
                 labels: {
-                    format: '{value}'
+                    format: '{value:,.0f}'
                 }
             },
             tooltip: {
@@ -340,8 +350,6 @@
                 categories: dates
             });
         }
-
-
 
     });
 </script>
