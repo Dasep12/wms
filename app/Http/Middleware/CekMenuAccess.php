@@ -24,7 +24,7 @@ class CekMenuAccess
 
         if ($data != null) {
             if ($data[0]->enable_menu == 0) {
-                return redirect('/deny');
+                return redirect('/administrator/deny');
             }
         }
         return $next($request);
