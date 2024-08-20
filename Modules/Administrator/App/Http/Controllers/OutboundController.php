@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Administrator\App\Models\Outbound;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
+use Modules\Administrator\App\Models\Inbound;
 
 class OutboundController extends Controller
 {
@@ -229,13 +230,23 @@ class OutboundController extends Controller
     {
 
         $par = DB::select("SELECT * FROM vw_tbl_sj WHERE headers_id = $req->id ");
-
-        $data = ["data" => $par];
+        $headers = DB::table('tbl_trn_shipingmaterial as a')
+            ->leftJoin('tbl_mst_customers as b', 'a.customer_id', '=', 'b.id')
+            ->where('a.id',  $req->id)
+            ->select(
+                'b.name_customers',
+                'b.code_customers',
+                'a.*',
+                'a.date_trans',
+                DB::raw('DATE_FORMAT(a.date_trans, "%d/%m/%Y") as formatted_date_trans')
+            )
+            ->first();
+        $data = ["data" => $par, 'head' => $headers];
         Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         Pdf::setPaper('A4', 'portrait');
         $pdf = Pdf::loadView('administrator::outbound.surat_jalan', $data);
         return $pdf->stream();
-        return $pdf->download('invoice.pdf');
+        // return $pdf->download('invoice.pdf');
 
         // $mpdf = new \Mpdf\Mpdf(['orientation' => 'P']);
         // $mpdf->WriteHTML(view("administrator::outbound.surat_jalan", ['data' => $data]));

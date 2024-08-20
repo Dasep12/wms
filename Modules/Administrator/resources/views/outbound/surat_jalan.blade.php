@@ -108,12 +108,12 @@
                 <tr>
                     <td>SUPPLIER CODE</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ strtoupper($head->code_customers) }}</td>
                 </tr>
                 <tr>
                     <td>NAME</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ strtoupper($head->name_customers) }}</td>
                 </tr>
             </table>
         </div>
@@ -122,21 +122,21 @@
                 <tr>
                     <td>DELIVERY TO</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ strtoupper($head->ship_to) }}</td>
                 </tr>
                 <tr>
                     <td>DATE</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ $head->formatted_date_trans }}</td>
                 </tr>
             </table>
         </div>
         <div class="grid-item">
             <table class="table-1">
                 <tr>
-                    <td>NO PO</td>
+                    <td>NO DN</td>
                     <td>:</td>
-                    <td></td>
+                    <td>{{ strtoupper($head->no_reference) }}</td>
                 </tr>
             </table>
         </div>
@@ -196,7 +196,7 @@
                     <td align="center">PREPARED</td>
                 </tr>
                 <tr>
-                    <td>KEND NO.</td>
+                    <td style="font-size: 11px;">KEND NO. {{ strtoupper($head->no_truck) }}</td>
                 </tr>
                 <tr>
                     <td><br><br></td>
