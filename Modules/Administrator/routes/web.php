@@ -110,6 +110,7 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::get('jsonOutbound', 'OutboundController@jsonOutbound');
     Route::post('jsonCreateOutbound', 'OutboundController@jsonCreateOutbound');
     Route::post('jsonUpdateOutbound', 'OutboundController@jsonUpdateOutbound');
+    Route::post('jsonUpdatesOutbound', 'OutboundController@jsonUpdateOutbound');
     Route::post('jsonDeleteOutbound', 'OutboundController@jsonDeleteOutbound');
     Route::post('jsonPutawayOutbound', 'OutboundController@jsonPutawayOutbound');
     Route::get('jsonStockListMaterialByCustomers', 'OutboundController@jsonStockListMaterialByCustomers');

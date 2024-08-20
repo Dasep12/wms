@@ -28,6 +28,7 @@
                     <button type="button" name="tloEnable" onclick="CrudWarehouse('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
                     @endif
                     <button type="button" name="tloEnable" onclick="ReloadBarang()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
+                    <button type="button" name="tloEnable" onclick="Export()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf-o"></i> Export</button>
                 </div>
             </div>
         </div>
@@ -62,6 +63,7 @@
     });
 </script>
 @include('administrator::warehouse.partials.CrudWarehouse')
+
 <script>
     $(document).ready(function() {
         $("#jqGridMain").jqGrid({
@@ -69,7 +71,7 @@
             datatype: "json",
             mtype: "GET",
             postData: {
-                id: "1",
+                id: "",
                 "_token": "{{ csrf_token() }}",
             },
             colModel: [{
@@ -129,6 +131,7 @@
                     return obj.records;
                 }
             },
+            loadonce: true,
             viewrecords: true,
             rownumbers: true,
             rownumWidth: 30,
@@ -136,7 +139,7 @@
             gridview: true,
             width: 780,
             height: 350,
-            rowNum: 10,
+            rowNum: 15,
             rowList: [10, 30, 50],
             pager: "#pager",
             loadComplete: function(data) {
@@ -146,6 +149,8 @@
                 }
             },
         });
+
+
 
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
@@ -168,7 +173,32 @@
             var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
             $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
         }).trigger('resize');
+
     })
+
+
+
+    function Export() {
+        options = {
+            title: null,
+            orientation: 'portrait',
+            pageSize: 'A4',
+            description: null,
+            onBeforeExport: null,
+            download: 'download',
+            includeLabels: true,
+            includeGroupHeader: true,
+            includeFooter: true,
+            includeHeader: true,
+            fileName: "jqGridExport.pdf",
+            mimetype: "application/pdf",
+            loadIndicator: true,
+            treeindent: "-"
+        }
+        $("#jqGridMain").jqGrid("exportToPdf", options);
+    }
+
+
 
     function CrudWarehouse(action, idx) {
 

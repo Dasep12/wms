@@ -20,7 +20,7 @@ class LocationController extends Controller
     public function index()
     {
         $data = [
-            'warehouse' => Warehouse::get()
+            'warehouse' => Warehouse::where('status_warehouse', '1')->get()
         ];
         return view('administrator::location/index', $data);
     }

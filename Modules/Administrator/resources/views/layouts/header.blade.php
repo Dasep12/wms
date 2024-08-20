@@ -76,6 +76,10 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
+    <!-- Load pdfmake lib files -->
+    <script type="text/javascript" language="javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.26/build/pdfmake.min.js"> </script>
+    <script type="text/javascript" language="javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.26/build/vfs_fonts.js"></script>
+
     <style>
         .loadering {
             width: 45px;

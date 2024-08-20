@@ -458,7 +458,7 @@
             if (actions == "create") {
                 url = '{{ url("administrator/jsonCreateOutbound") }}';
             } else if (actions == "update") {
-                url = '{{ url("administrator/jsonUpdateOutbound") }}';
+                url = '{{ url("administrator/jsonUpdatesOutbound") }}';
             } else if (actions == "delete") {
                 url = '{{ url("administrator/jsonDeleteOutbound") }}';
             } else if (actions == "putaway") {
@@ -482,7 +482,7 @@
             $.ajax({
                 url: url,
                 method: "POST",
-                type: 'POST',
+                type: "POST",
                 data: data,
                 beforeSend: function() {
                     document.querySelector(".loader").style.display = "block";

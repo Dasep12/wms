@@ -314,7 +314,19 @@
     })
 
 
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
     function CrudOutbound(action, idx) {
 
@@ -403,7 +415,7 @@
         $("#no_truck").val(no_truck);
         $("#no_surat_jalan").val(no_surat_jalan);
         $("#no_reference").val(no_reference);
-        $("#date_trans").val(date_trans);
+        $("#date_trans").val(formatDate(date_trans));
         $("#date_transs").val(date_transs);
         $("#id").val(idx)
 

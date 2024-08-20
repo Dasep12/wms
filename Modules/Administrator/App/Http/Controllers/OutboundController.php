@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Administrator\App\Models\Outbound;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Support\Facades\Log;
 
 class OutboundController extends Controller
 {
@@ -112,11 +112,14 @@ class OutboundController extends Controller
         }
     }
 
+
+
     public function jsonUpdateOutbound(Request $req)
     {
         $material = json_decode($req->dataMaterial);
         $detailMaterial = [];
         $headersId = $req->id;
+
         for ($i = 0; $i < count($material); $i++) {
             $details = array(
                 'headers_id'    => $req->id,
@@ -136,18 +139,18 @@ class OutboundController extends Controller
                 'begin_stock_units'   => $material[$i]->StockqtyUnits,
                 'begin_stock_packaging'   => $material[$i]->StockqtyPackaging,
                 'created_at'            => date('Y-m-d H:i:s'),
-                'created_by'            => 1,
+                'created_by'            => session()->get("user_id"),
             );
             array_push($detailMaterial, $details);
         }
 
-
         $listIdDetail = DB::select("SELECT id as detail_id FROM tbl_trn_detailshipingmaterial WHERE headers_id = '$headersId' ");
         $existingIdInDB = array_filter(array_column($listIdDetail, 'detail_id'));
+
         DB::beginTransaction();
         try {
             // Create a DateTime object from the original date string
-            $dates = DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
+            //$dates = DateTime::createFromFormat('d M Y H:i:s', $req->date_trans);
             $dataHeader = [
                 'customer_id'       => $req->customer_id,
                 'no_reference'      => $req->no_reference,
@@ -155,7 +158,7 @@ class OutboundController extends Controller
                 'ship_to'           => $req->ship_to,
                 'driver'            => $req->driver,
                 'no_truck'          => $req->no_truck,
-                'date_trans'        => $dates->format('Y-m-d H:i:s'),
+                'date_trans'        => $req->date_trans . ' ' . date('H:i:s'),
                 'date_in'           => $req->date_in,
                 'created_at'        => date('Y-m-d H:i:s'),
                 'status'            => 'open',

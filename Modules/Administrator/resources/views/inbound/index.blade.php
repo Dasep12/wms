@@ -419,8 +419,6 @@
         $("#no_reference").val(no_reference);
         $("#date_trans").val(formatDate(date_trans));
         $("#id").val(idx)
-
-
     }
 
     function loadMateriaList(row_id) {

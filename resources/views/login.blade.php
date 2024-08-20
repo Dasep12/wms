@@ -25,7 +25,7 @@
     <style>
         body {
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('assets/images/bg-rim.png') !important;
+                url('login/bg_rim.jpg') !important;
             background-size: cover !important;
             background-position: center !important;
         }
@@ -51,6 +51,14 @@
             font-size: 0.875em !important;
             margin-top: 5px !important;
         }
+
+        .rounded {
+            border-radius: 1.5rem !important;
+        }
+
+        label {
+            color: #FFF !important;
+        }
     </style>
 
 </head>
@@ -61,7 +69,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
-                    <div style="background-color: #F5FAFF !important;" class=" shadow rounded">
+                    <div style="background-color: #9aabc6c9 !important;" class="shadow rounded">
                         <div class="row">
                             <div class="col-md-7 pe-0">
                                 <h4>{{ session()->get('iduser'); }}</h4>
@@ -95,7 +103,7 @@
                                 <div class="col-md-12 pt-5"></div>
                                 <div class="form-right h-100 text-center pt-5">
                                     <img style="width: 80%;" src="{{ asset('assets/images/logo-rim-removebg-preview.png') }}" alt="">
-                                    <label style="font-weight: 600;font-style: italic;color: #4265cc;font-size: 13px;" for=""> Welcome To WMS version 1.0</label>
+                                    <label style="font-weight: 600;font-style: italic;color: #fff;font-size: 13px;" for=""> Welcome To WMS version 1.0</label>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +112,7 @@
             </div>
 
             <div class="row">
-                <div class="row mt-2">
+                <div class="col-lg-6 offset-lg-3">
                     <div id="ErrorInfo">
                     </div>
                 </div>
@@ -112,7 +120,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     <script>
         $(document).ready(function() {
@@ -158,8 +167,6 @@
                                 }, 100)
                             } else {
                                 doSuccess(data.msg, "warning")
-                                // var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2 alert-dismissible fade show" role="alert"><small><b> Error !</b><br/>' + data.msg + '</small> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>'
-                                // $('#ErrorInfo').html(errMsg);
                             }
                         },
                         error: function(xhr, desc, err) {
@@ -172,7 +179,7 @@
 
                             respText = unescape(respText).replaceAll("_n_", "<br/>")
 
-                            var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2 alert-dismissible fade show" role="alert"><small><b> Error ' + xhr.status + '!</b><br/>' + respText + '</small><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div></div>'
+                            var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2 alert-dismissible fade show" role="alert"><small><b> Error ' + xhr.status + '!</b><br/>' + respText + '</small><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></button></div></div>'
                             $('#ErrorInfo').html(errMsg);
                         },
                     });
