@@ -40,13 +40,13 @@
 
                             <div class="form-group">
                                 <label for="role_id">Type * :</label>
-                                <select name="role_id" class="form-control" id="role_id">
+                                <select name="role_id" class="custom-select form-control" id="role_id">
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label for="customers_id">Customers * :</label>
-                                <select name="customers_id" class="form-control" id="customers_id"></select>
+                                <select name="customers_id" class="custom-select form-control" id="customers_id"></select>
                             </div>
 
                             <div class="form-group">

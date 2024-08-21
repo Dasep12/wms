@@ -14,7 +14,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="parent_id">Parent Unit* :</label>
-                                <select name="parent_id" class="form-control" id="parent_id">
+                                <select name="parent_id" class="custom-select form-control" id="parent_id">
                                     <option value="*">*</option>
                                     <?php
                                     foreach ($unitParent as $units) { ?>

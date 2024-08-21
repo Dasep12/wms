@@ -199,5 +199,43 @@
                 opacity: 1
             }
         }
+
+
+        .custom-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 1px;
+            background-color: #fefefe;
+            font-size: 16px;
+            color: #555;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* Add arrow inside select box */
+        .custom-select:after {
+            content: '\25BC';
+            /* Unicode character for down arrow */
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* Wrapper for positioning the arrow */
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Add styling to the first option (placeholder) */
+        .custom-select option:first-child {
+            color: #999;
+        }
     </style>
 </head>

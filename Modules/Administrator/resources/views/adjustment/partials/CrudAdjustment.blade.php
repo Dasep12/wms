@@ -17,7 +17,7 @@
                         <div class="col-md-3 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="" class="">Customers :</label>
-                                <select required name="customer_id" class="form-control" id="customer_id">
+                                <select required name="customer_id" class="custom-select form-control" id="customer_id">
                                     <option value="">* Select Customers </option>
                                 </select>
                             </div>
@@ -47,7 +47,7 @@
                         <div class="col-md-2 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="type_adjust" class="">Type Adjust :</label>
-                                <select name="type_adjust" id="type_adjust" class="form-control">
+                                <select name="type_adjust" id="type_adjust" class="custom-select form-control">
                                     <option value="in">Adjust Plus (+)</option>
                                     <option value="out">Adjust Minus (-)</option>
                                 </select>

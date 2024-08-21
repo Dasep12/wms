@@ -17,7 +17,7 @@
                             <div class="form-group">
 
                                 <label for="customers_id">Name Customers* :</label>
-                                <select style="width: 100%;" name="customers_id" class="form-control" required data-parsley-allselected id="customers_id">
+                                <select style="width: 100%;" name="customers_id" class="form-control custom-select" required data-parsley-allselected id="customers_id">
                                     <option value="">Select Customers</option>
                                 </select>
                                 <div id="customers_id-errors" class="parsley-errors-list"></div>
@@ -36,7 +36,7 @@
 
                             <div class="form-group">
                                 <label for="location_id">Location * :</label>
-                                <select style="width: 100%;" name="location_id" class="form-control" required data-parsley-allselected id="location_id">
+                                <select style="width: 100%;" name="location_id" class="form-control custom-select" required data-parsley-allselected id="location_id">
                                     <option value="">Select Location</option>
                                 </select>
                                 <div id="location_id-errors"></div>
@@ -48,12 +48,12 @@
                                 <label for="parentUnitId">Units * :</label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <select style="width: 100%;" name="parentUnitId" class="form-control" required data-parsley-allselected id="parentUnitId">
+                                        <select style="width: 100%;" name="parentUnitId" class="form-control custom-select" required data-parsley-allselected id="parentUnitId">
                                             <option value="">Select Units</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <select style="width: 100%;" name="unit_id" class="form-control" required data-parsley-allselected id="unit_id">
+                                        <select style="width: 100%;" name="unit_id" class="form-control custom-select" required data-parsley-allselected id="unit_id">
                                             <option value="">Select Units</option>
                                         </select>
                                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="packaging_id">Packaging * :</label>
-                                <select style="width: 100%;" name="packaging_id" class="form-control" required data-parsley-allselected id="packaging_id">
+                                <select style="width: 100%;" name="packaging_id" class="form-control custom-select" required data-parsley-allselected id="packaging_id">
                                     <option value="">Select Units</option>
                                 </select>
                                 <div id="packaging_id-errors"></div>

@@ -122,6 +122,9 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::get('summary', 'SummaryController@index');
     Route::get('jsonSummary', 'SummaryController@jsonSummary');
     Route::get('jsonDetailSummary', 'SummaryController@jsonDetailSummary');
+    Route::get('jsonListMaterialSummary', 'SummaryController@jsonListMaterialSummary');
+    Route::get('jsonExportExcel', 'SummaryController@jsonExportExcel');
+    // Route::get('jsonExportPdf', 'SummaryController@jsonExportPdf');
 
 
     // ROLES ROUTES 

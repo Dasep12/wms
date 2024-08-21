@@ -17,7 +17,7 @@
                         <div class="col-md-3 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="" class="">Customers :</label>
-                                <select required name="customer_id" class="form-control" id="customer_id">
+                                <select required name="customer_id" class="custom-select form-control" id="customer_id">
                                     <option value="">* Select Customers </option>
                                 </select>
                             </div>

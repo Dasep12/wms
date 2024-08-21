@@ -14,7 +14,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="warehouse_id">Warehouse* :</label>
-                                <select name="warehouse_id" class="form-control" id="warehouse_id">
+                                <select name="warehouse_id" class="form-control custom-select" id="warehouse_id">
                                     <?php
                                     foreach ($warehouse as $whs) { ?>
                                         <option value="{{ $whs->id }}">{{ $whs->NameWarehouse }}</option>
