@@ -124,7 +124,6 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::get('jsonDetailSummary', 'SummaryController@jsonDetailSummary');
     Route::get('jsonListMaterialSummary', 'SummaryController@jsonListMaterialSummary');
     Route::get('jsonExportExcel', 'SummaryController@jsonExportExcel');
-    // Route::get('jsonExportPdf', 'SummaryController@jsonExportPdf');
 
 
     // ROLES ROUTES 
@@ -156,4 +155,11 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::post('jsonPutawayAdjustment', 'AdjustmentController@jsonPutawayAdjustment');
     Route::get('jsonStockListMaterialByCustomers', 'AdjustmentController@jsonStockListMaterialByCustomers');
     Route::post('generateDN', 'AdjustmentController@generateDN');
+
+
+    // REPORT INBOUND
+    Route::get("reportInbound", 'ReportingController@inbound');
+    Route::get("reportOutbound", 'ReportingController@outbound');
+    Route::get("exportReportInbound", 'ReportingController@jsonExportExcelInbound');
+    Route::get("exportReportOutbound", 'ReportingController@jsonExportExcelOutbound');
 });

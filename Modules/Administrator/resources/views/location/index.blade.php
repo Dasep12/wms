@@ -27,6 +27,7 @@
                     <button type="button" name="tloEnable" onclick="CrudLocation('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
                     @endif
                     <button type="button" name="tloEnable" onclick="ReloadBarang()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
+                    <!-- <button type="button" name="tloEnable" onclick="Export()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf-o"></i> Export</button> -->
                 </div>
             </div>
         </div>
@@ -115,7 +116,7 @@
                 },
             }, {
                 label: 'Action',
-                name: 'id',
+                name: 'action',
                 align: 'center',
                 width: 70,
                 formatter: actionBarangFormatter
@@ -135,6 +136,7 @@
                     return obj.records;
                 }
             },
+            loadonce: false,
             viewrecords: true,
             rownumbers: true,
             rownumWidth: 30,
@@ -254,6 +256,30 @@
             },
 
         })
+    }
+
+    function Export() {
+        options = {
+            title: 'Location',
+            orientation: 'portrait',
+            pageSize: 'A4',
+            description: null,
+            onBeforeExport: null,
+            download: 'download',
+            includeLabels: true,
+            includeGroupHeader: true,
+            includeFooter: true,
+            includeHeader: true,
+            fileName: "jqGridExport.pdf",
+            mimetype: "application/pdf",
+            loadIndicator: true,
+            treeindent: "-"
+        }
+        $("#jqGridMain").jqGrid("hideCol", "action")
+        $("#jqGridMain").jqGrid("hideCol", "status_location")
+        $("#jqGridMain").jqGrid("exportToPdf", options);
+        $("#jqGridMain").jqGrid("showCol", "action")
+        $("#jqGridMain").jqGrid("showCol", "status_location")
     }
 </script>
 @endsection

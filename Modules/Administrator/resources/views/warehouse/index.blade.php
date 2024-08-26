@@ -28,7 +28,7 @@
                     <button type="button" name="tloEnable" onclick="CrudWarehouse('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>
                     @endif
                     <button type="button" name="tloEnable" onclick="ReloadBarang()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-refresh"></i> Refresh</button>
-                    <button type="button" name="tloEnable" onclick="Export()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf-o"></i> Export</button>
+                    <!-- <button type="button" name="tloEnable" onclick="Export()" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf-o"></i> Export</button> -->
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                 }
             }, {
                 label: 'Action',
-                name: 'id',
+                name: 'action',
                 align: 'center',
                 width: 70,
                 formatter: actionBarangFormatter
@@ -131,7 +131,7 @@
                     return obj.records;
                 }
             },
-            loadonce: true,
+            loadonce: false,
             viewrecords: true,
             rownumbers: true,
             rownumWidth: 30,
@@ -139,7 +139,7 @@
             gridview: true,
             width: 780,
             height: 350,
-            rowNum: 15,
+            rowNum: 20,
             rowList: [10, 30, 50],
             pager: "#pager",
             loadComplete: function(data) {
@@ -180,7 +180,7 @@
 
     function Export() {
         options = {
-            title: null,
+            title: 'Warehouse',
             orientation: 'portrait',
             pageSize: 'A4',
             description: null,
@@ -195,7 +195,20 @@
             loadIndicator: true,
             treeindent: "-"
         }
+
+        // Temporarily enable loadonce and reload grid
+        $("#jqGridMain").jqGrid("setGridParam", {
+            loadonce: true
+        }).trigger("reloadGrid");
+        $("#jqGridMain").jqGrid("hideCol", "action")
+        $("#jqGridMain").jqGrid("hideCol", "status_warehouse")
         $("#jqGridMain").jqGrid("exportToPdf", options);
+        $("#jqGridMain").jqGrid("showCol", "action")
+        $("#jqGridMain").jqGrid("showCol", "status_warehouse");
+        // Restore original loadonce state
+        $("#jqGridMain").jqGrid("setGridParam", {
+            loadonce: false
+        }).trigger("reloadGrid");
     }
 
 

@@ -13,8 +13,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class SummaryController extends Controller
 {
@@ -64,42 +65,54 @@ class SummaryController extends Controller
         if ($req->material_id != "*") {
             $sql .= " AND a.material_id='" . $req->material_id . "'";
         }
+
+        $sql .= " ORDER BY d.no_material ASC";
         $data = DB::select($sql);
 
         // Create a new Spreadsheet object
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        // Add an image to the spreadsheet
+        $drawing = new Drawing();
+        $drawing->setName('Sample Image');
+        $drawing->setDescription('Sample Image');
+        $drawing->setPath('assets/images/logo-rim.jpg'); // Path to your image file
+        $drawing->setHeight(100); // Set the height of the image
+        $drawing->setCoordinates('A1'); // Set the cell where the image should be placed
+        $sheet->mergeCells('A1:E5');
+        $drawing->setWorksheet($sheet);
+
         // Set some data in the spreadsheet
-        $sheet->setCellValue('A1', 'No');
-        $sheet->mergeCells('A1:A2');
-        $sheet->setCellValue('B1', 'Date');
-        $sheet->mergeCells('B1:B2');
-        $sheet->setCellValue('C1', 'Material');
-        $sheet->setCellValue('C2', 'Name');
-        $sheet->setCellValue('D2', 'Part Number');
-        $sheet->setCellValue('E2', 'Unique Id');
-        $sheet->mergeCells('C1:E1');
-        $sheet->setCellValue('F1', 'Types');
-        $sheet->setCellValue('F2', 'Trans');
-        $sheet->setCellValue('G2', 'Type');
-        $sheet->mergeCells('F1:G1');
-        $sheet->setCellValue('H1', 'Detail');
-        $sheet->setCellValue('H2', 'Unit');
-        $sheet->setCellValue('I2', 'Packaging');
-        $sheet->mergeCells('H1:I1');
-        $sheet->setCellValue('J1', 'Begin Stock');
-        $sheet->setCellValue('J2', 'Unit');
-        $sheet->setCellValue('K2', 'Packaging');
-        $sheet->mergeCells('J1:K1');
-        $sheet->setCellValue('L1', 'IN/OUT Stock');
-        $sheet->setCellValue('L2', 'Unit');
-        $sheet->setCellValue('M2', 'Packaging');
-        $sheet->mergeCells('L1:M1');
-        $sheet->setCellValue('N1', 'Final Stock');
-        $sheet->setCellValue('N2', 'Unit');
-        $sheet->setCellValue('O2', 'Packaging');
-        $sheet->mergeCells('N1:O1');
+        $sheet->setCellValue('A8', 'No');
+        $sheet->mergeCells('A8:A9');
+        $sheet->setCellValue('B8', 'Date');
+        $sheet->mergeCells('B8:B9');
+        $sheet->setCellValue('C8', 'Material');
+        $sheet->setCellValue('C9', 'Name');
+        $sheet->setCellValue('D9', 'Part Number');
+        $sheet->setCellValue('E9', 'Unique Id');
+        $sheet->mergeCells('C8:E8');
+        $sheet->setCellValue('F8', 'Types');
+        $sheet->setCellValue('F9', 'Trans');
+        $sheet->setCellValue('G9', 'Type');
+        $sheet->mergeCells('F8:G8');
+        $sheet->setCellValue('H8', 'Detail');
+        $sheet->setCellValue('H9', 'Unit');
+        $sheet->setCellValue('I9', 'Packaging');
+        $sheet->mergeCells('H8:I8');
+        $sheet->setCellValue('J8', 'Begin Stock');
+        $sheet->setCellValue('J9', 'Unit');
+        $sheet->setCellValue('K9', 'Packaging');
+        $sheet->mergeCells('J8:K8');
+        $sheet->setCellValue('L8', 'IN/OUT Stock');
+        $sheet->setCellValue('L9', 'Unit');
+        $sheet->setCellValue('M9', 'Packaging');
+        $sheet->mergeCells('L8:M8');
+        $sheet->setCellValue('N8', 'Final Stock');
+        $sheet->setCellValue('N9', 'Unit');
+        $sheet->setCellValue('O9', 'Packaging');
+        $sheet->mergeCells('N8:O8');
 
         // Apply borders to a single cell
         $styleArray = [
@@ -115,7 +128,7 @@ class SummaryController extends Controller
             ],
         ];
         // Set background color for a range of cells
-        $sheet->getStyle('A1:O2')->applyFromArray([
+        $sheet->getStyle('A8:O9')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'f8fc03'], // Magenta background
@@ -126,11 +139,11 @@ class SummaryController extends Controller
         ]);
 
         // Example: Freeze the first row
-        $sheet->freezePane('E3');
+        $sheet->freezePane('E8');
         // Auto size columns based on the content
         $this->autoSizeColumns($sheet, range('A', 'O'));
 
-        $start = 3;
+        $start = 10;
         $no = 1;
         foreach ($data as $d) {
             $sheet->setCellValue('A' . $start, $no++);
@@ -151,9 +164,9 @@ class SummaryController extends Controller
             $start++;
         }
 
-        $sheet->getStyle('A1:O' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:O' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:O' . $start - 1)->applyFromArray($styleArray);
+        $sheet->getStyle('A8:O' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:O' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A8:O' . $start - 1)->applyFromArray($styleArray);
 
 
         if ($req->act == "xls") {
@@ -188,12 +201,12 @@ class SummaryController extends Controller
     }
 
 
+    public function jsonExportExcel2(Request $req) {}
+
     private function autoSizeColumns($sheet, array $columns)
     {
         foreach ($columns as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
-
-    public function jsonExportPdf(Request $req) {}
 }
