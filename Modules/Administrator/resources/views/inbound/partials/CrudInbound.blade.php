@@ -26,14 +26,14 @@
                         <div class="col-md-2 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="no_surat_jalan" class="">No.Surat Jalan :</label>
-                                <input type="text" required name="no_surat_jalan" id="no_surat_jalan" class="form-control" placeholder="*No. SJ">
+                                <input required type="text" name="no_surat_jalan" id="no_surat_jalan" class="form-control" placeholder="*No. SJ">
                             </div>
                         </div>
 
                         <div class="col-md-2 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="no_reference" class="">DN Number : </label>
-                                <input type="text" required name="no_reference" id="no_reference" class="form-control" placeholder="*Delivery Notes Number">
+                                <input type="text" name="no_reference" id="no_reference" class="form-control" placeholder="*Delivery Notes Number">
                             </div>
                         </div>
                         <div class="col-md-2 pr-1 pl-1">

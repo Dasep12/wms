@@ -38,7 +38,7 @@
         }
 
         .grid-item {
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             display: table-cell
         }
@@ -174,7 +174,7 @@
 
     </div>
 
-    <div class="grid-container">
+    <div class="grid-container" style="position:absolute;bottom:15%">
         <div class="grid-item">
             <h4 class="headers_table_ttd">CUSTOMER</h4>
             <table class="table-1 table" style="width:100%">

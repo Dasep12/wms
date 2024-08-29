@@ -8,7 +8,7 @@ function getSuratJalanNumber($idCustomers)
     if ($idCustomers) {
         $data =  DB::select("SELECT max(substr(tts.no_surat_jalan,1,4)) noUrut  
         from  tbl_trn_shipingmaterial tts
-        where types in ('out') and types_trans in ('Order') and tts.customer_id  = $idCustomers  and date_format(date_trans,'%Y-%m')= '" . date('Y-m') . "' ");
+        where types in ('out') and types_trans in ('Order') and tts.customer_id  = $idCustomers  and date_format(date_trans,'%Y')= '" . date('Y') . "' ");
         $cust  = Customers::find($idCustomers);
         // dd($data);
         if ($data[0]->noUrut != null) {

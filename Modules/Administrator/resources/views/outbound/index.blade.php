@@ -345,7 +345,7 @@
             $("#CrudOutboundAction").val('create');
             $("#CrudOutboundAlertDelete").html('');
             $("#formCrudOutbound .form-control").attr("readonly", false)
-            $("#no_surat_jalan").attr("readonly", true);
+            //  $("#no_surat_jalan").attr("readonly", true);
             $(".btnResetField").attr("disabled", false);
         } else if (action == "update") {
             document.getElementById("formCrudOutbound").reset();
