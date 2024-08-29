@@ -86,7 +86,7 @@
                 label: 'Customers',
                 name: 'code_customers',
                 align: 'center',
-                width: 110
+                width: 80
             }, {
                 label: 'Name Material',
                 name: 'name_material',
@@ -168,12 +168,18 @@
             autowidth: true,
             shrinkToFit: false,
             fromServer: true,
+            rowList: [10, 30, 50],
             loadComplete: function(data) {
                 $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
                 $("#jqGridMain").parent().find(".no-data").remove(); // Remove the message if there is data
                 if (data.records === 0) {
                     $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
                 }
+
+                $(window).on('resize', function() {
+                    var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
+                    $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
+                }).trigger('resize');
             }
         });
 
@@ -205,10 +211,7 @@
             return btn;
         }
 
-        $(window).on('resize', function() {
-            var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
-            $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
-        }).trigger('resize');
+
     })
 
     function CrudMaterial(action, idx) {

@@ -47,6 +47,7 @@
                             <div class="form-group">
                                 <label for="customers_id">Customers * :</label>
                                 <select name="customers_id" class="custom-select form-control" id="customers_id"></select>
+                                <small class="text-small text-danger font-italic">*hanya di isi untuk akun customer*</small>
                             </div>
 
                             <div class="form-group">

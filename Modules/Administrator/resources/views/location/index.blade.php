@@ -82,16 +82,16 @@
                 label: 'Warehouse',
                 name: 'NameWarehouse',
                 align: 'left',
-                width: 50
+                width: 80
             }, {
                 label: 'Location',
                 name: 'location',
                 align: 'left',
-                width: 40
+                width: 80
             }, {
                 label: 'Remarks',
                 name: 'remarks',
-                width: 30,
+                width: 70,
                 align: 'center',
 
             }, {
@@ -118,7 +118,7 @@
                 label: 'Action',
                 name: 'action',
                 align: 'center',
-                width: 70,
+                width: 30,
                 formatter: actionBarangFormatter
             }],
             jsonReader: {
@@ -142,7 +142,7 @@
             rownumWidth: 30,
             autoresizeOnLoad: true,
             gridview: true,
-            width: 780,
+            width: '100%',
             height: 350,
             rowNum: 10,
             rowList: [10, 30, 50],
@@ -152,6 +152,11 @@
                 if (data.records === 0) {
                     $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
                 }
+
+                $(window).on('resize', function() {
+                    var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
+                    $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
+                }).trigger('resize');
             },
         });
 
@@ -174,10 +179,7 @@
             return btn;
         }
 
-        $(window).on('resize', function() {
-            var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
-            $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
-        }).trigger('resize');
+
     })
 
     function CrudLocation(action, idx) {

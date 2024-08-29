@@ -207,8 +207,13 @@ use Illuminate\Support\Facades\DB;
             shrinkToFit: false,
             autowidth: true,
             pager: "#pager",
+            rowList: [10, 30, 50],
             loadComplete: function() {
                 $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
+                $(window).on('resize', function() {
+                    var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
+                    $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
+                }).trigger('resize');
             },
             subGrid: true,
             subGridRowExpanded: loadDetailTransaksi
@@ -356,10 +361,7 @@ use Illuminate\Support\Facades\DB;
             }]
         });
 
-        $(window).on('resize', function() {
-            var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
-            $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
-        }).trigger('resize');
+
 
         // Fetch Customers
         function GetlistCustomers(query) {

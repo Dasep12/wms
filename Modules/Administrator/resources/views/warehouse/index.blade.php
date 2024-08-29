@@ -113,7 +113,7 @@
                 label: 'Action',
                 name: 'action',
                 align: 'center',
-                width: 70,
+                // width: 70,
                 formatter: actionBarangFormatter
             }],
             jsonReader: {
@@ -137,7 +137,7 @@
             rownumWidth: 30,
             autoresizeOnLoad: true,
             gridview: true,
-            width: 780,
+            width: '100%',
             height: 350,
             rowNum: 20,
             rowList: [10, 30, 50],
@@ -147,6 +147,11 @@
                 if (data.records === 0) {
                     $("#jqGridMain").parent().append("<div class='d-flex justify-content-center no-data'><h3 class='text-secondary'>data not found</h3></div>");
                 }
+
+                $(window).on('resize', function() {
+                    var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
+                    $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
+                }).trigger('resize');
             },
         });
 
@@ -169,10 +174,7 @@
             return btn;
         }
 
-        $(window).on('resize', function() {
-            var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
-            $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
-        }).trigger('resize');
+
 
     })
 

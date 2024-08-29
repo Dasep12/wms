@@ -205,7 +205,7 @@
             rownumWidth: 30,
             autoresizeOnLoad: true,
             gridview: true,
-            width: 780,
+            width: '100%',
             height: 350,
             rowNum: 10,
             rowList: [10, 30, 50],
@@ -219,6 +219,10 @@
                 // } else {
                 //     $("#jqGridMain").parent().find(".no-data").remove();
                 // }
+                $(window).on('resize', function() {
+                    var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
+                    $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
+                }).trigger('resize');
             },
         });
 
@@ -306,10 +310,7 @@
         }
 
 
-        $(window).on('resize', function() {
-            var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
-            $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
-        }).trigger('resize');
+
 
     })
 
