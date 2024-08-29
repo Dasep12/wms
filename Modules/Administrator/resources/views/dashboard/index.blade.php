@@ -247,6 +247,7 @@
             series: [{
                 name: 'Inbound',
                 data: [],
+                color: 'green',
                 dataLabels: {
                     enabled: false // Disable data labels
                 }

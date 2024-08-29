@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
 
 class ReportingController extends Controller
@@ -70,26 +70,36 @@ class ReportingController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        // Add an image to the spreadsheet
+        $drawing = new Drawing();
+        $drawing->setName('Sample Image');
+        $drawing->setDescription('Sample Image');
+        $drawing->setPath('assets/images/logo-rim.jpg'); // Path to your image file
+        $drawing->setHeight(100); // Set the height of the image
+        $drawing->setCoordinates('A1'); // Set the cell where the image should be placed
+        $sheet->mergeCells('A1:E5');
+        $drawing->setWorksheet($sheet);
+
         // Set some data in the spreadsheet
-        $sheet->setCellValue('A1', 'No');
-        $sheet->mergeCells('A1:A2');
-        $sheet->setCellValue('B1', 'Surat Jalan');
-        $sheet->mergeCells('B1:B2');
-        $sheet->setCellValue('C1', 'Date');
-        $sheet->mergeCells('C1:C2');
-        $sheet->setCellValue('D1', 'Material');
-        $sheet->setCellValue('D2', 'Name');
-        $sheet->setCellValue('E2', 'Part Number');
-        $sheet->setCellValue('F2', 'Unique Id');
-        $sheet->mergeCells('D1:F1');
-        $sheet->setCellValue('G1', 'Detail');
-        $sheet->setCellValue('G2', 'Unit');
-        $sheet->setCellValue('H2', 'Packaging');
-        $sheet->mergeCells('G1:H1');
-        $sheet->setCellValue('I1', 'Detail Qty');
-        $sheet->setCellValue('I2', 'Qty/Unit');
-        $sheet->setCellValue('J2', 'Qty/Packaging');
-        $sheet->mergeCells('I1:J1');
+        $sheet->setCellValue('A8', 'No');
+        $sheet->mergeCells('A8:A9');
+        $sheet->setCellValue('B8', 'Surat Jalan');
+        $sheet->mergeCells('B8:B9');
+        $sheet->setCellValue('C8', 'Date');
+        $sheet->mergeCells('C8:C9');
+        $sheet->setCellValue('D8', 'Material');
+        $sheet->setCellValue('D9', 'Name');
+        $sheet->setCellValue('E9', 'Part Number');
+        $sheet->setCellValue('F9', 'Unique Id');
+        $sheet->mergeCells('D8:F8');
+        $sheet->setCellValue('G8', 'Detail');
+        $sheet->setCellValue('G9', 'Unit');
+        $sheet->setCellValue('H9', 'Packaging');
+        $sheet->mergeCells('G8:H8');
+        $sheet->setCellValue('I8', 'Detail Qty');
+        $sheet->setCellValue('I9', 'Qty Unit');
+        $sheet->setCellValue('J9', 'Qty Packaging');
+        $sheet->mergeCells('I8:J8');
 
         // Apply borders to a single cell
         $styleArray = [
@@ -105,7 +115,7 @@ class ReportingController extends Controller
             ],
         ];
         // Set background color for a range of cells
-        $sheet->getStyle('A1:J2')->applyFromArray([
+        $sheet->getStyle('A8:J9')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'f8fc03'], // Magenta background
@@ -120,7 +130,7 @@ class ReportingController extends Controller
         // Auto size columns based on the content
         $this->autoSizeColumns($sheet, range('A', 'J'));
 
-        $start = 3;
+        $start = 10;
         $no = 1;
 
         if (count($data) > 0) {
@@ -142,10 +152,10 @@ class ReportingController extends Controller
             $sheet->mergeCells('A' . $start . ':J' . $start + 1);
         }
 
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:J' . $start - 1)->applyFromArray($styleArray);
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A8:J' . $start - 1)->applyFromArray($styleArray);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         if ($req->act == "xls") {
@@ -197,26 +207,36 @@ class ReportingController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        // Add an image to the spreadsheet
+        $drawing = new Drawing();
+        $drawing->setName('Sample Image');
+        $drawing->setDescription('Sample Image');
+        $drawing->setPath('assets/images/logo-rim.jpg'); // Path to your image file
+        $drawing->setHeight(100); // Set the height of the image
+        $drawing->setCoordinates('A1'); // Set the cell where the image should be placed
+        $sheet->mergeCells('A1:E5');
+        $drawing->setWorksheet($sheet);
+
         // Set some data in the spreadsheet
-        $sheet->setCellValue('A1', 'No');
-        $sheet->mergeCells('A1:A2');
-        $sheet->setCellValue('B1', 'Surat Jalan');
-        $sheet->mergeCells('B1:B2');
-        $sheet->setCellValue('C1', 'Date');
-        $sheet->mergeCells('C1:C2');
-        $sheet->setCellValue('D1', 'Material');
-        $sheet->setCellValue('D2', 'Name');
-        $sheet->setCellValue('E2', 'Part Number');
-        $sheet->setCellValue('F2', 'Unique Id');
-        $sheet->mergeCells('D1:F1');
-        $sheet->setCellValue('G1', 'Detail');
-        $sheet->setCellValue('G2', 'Unit');
-        $sheet->setCellValue('H2', 'Packaging');
-        $sheet->mergeCells('G1:H1');
-        $sheet->setCellValue('I1', 'Detail Qty');
-        $sheet->setCellValue('I2', 'Qty/Unit');
-        $sheet->setCellValue('J2', 'Qty/Packaging');
-        $sheet->mergeCells('I1:J1');
+        $sheet->setCellValue('A8', 'No');
+        $sheet->mergeCells('A8:A9');
+        $sheet->setCellValue('B8', 'Surat Jalan');
+        $sheet->mergeCells('B8:B9');
+        $sheet->setCellValue('C8', 'Date');
+        $sheet->mergeCells('C8:C9');
+        $sheet->setCellValue('D8', 'Material');
+        $sheet->setCellValue('D9', 'Name');
+        $sheet->setCellValue('E9', 'Part Number');
+        $sheet->setCellValue('F9', 'Unique Id');
+        $sheet->mergeCells('D8:F8');
+        $sheet->setCellValue('G8', 'Detail');
+        $sheet->setCellValue('G9', 'Unit');
+        $sheet->setCellValue('H9', 'Packaging');
+        $sheet->mergeCells('G8:H8');
+        $sheet->setCellValue('I8', 'Detail Qty');
+        $sheet->setCellValue('I9', 'Qty Unit');
+        $sheet->setCellValue('J9', 'Qty Packaging');
+        $sheet->mergeCells('I8:J8');
 
         // Apply borders to a single cell
         $styleArray = [
@@ -232,7 +252,7 @@ class ReportingController extends Controller
             ],
         ];
         // Set background color for a range of cells
-        $sheet->getStyle('A1:J2')->applyFromArray([
+        $sheet->getStyle('A8:J9')->applyFromArray([
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['argb' => 'f8fc03'], // Magenta background
@@ -247,7 +267,7 @@ class ReportingController extends Controller
         // Auto size columns based on the content
         $this->autoSizeColumns($sheet, range('A', 'J'));
 
-        $start = 3;
+        $start = 10;
         $no = 1;
 
         if (count($data) > 0) {
@@ -269,10 +289,10 @@ class ReportingController extends Controller
             $sheet->mergeCells('A' . $start . ':J' . $start + 1);
         }
 
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:J' . $start - 1)->applyFromArray($styleArray);
-        $sheet->getStyle('A1:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A8:J' . $start - 1)->applyFromArray($styleArray);
+        $sheet->getStyle('A8:J' . $start)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
 
         if ($req->act == "xls") {

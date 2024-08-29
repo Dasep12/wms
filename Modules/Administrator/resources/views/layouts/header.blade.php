@@ -8,19 +8,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>WMS | BIT </title>
+    <title>WMS | RIM </title>
 
-
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/images/rim_logo_rev.png') }}">
+    <link rel=" icon" type="image/x-icon" href="{{ asset('assets/images/rim_logo_rev.png') }}">
 
 
     <!-- Font Awesome -->
-    <link href="{{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href=" {{ asset('assets/vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <!-- NProgress -->
     <link href="{{ asset('assets/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <!-- jQuery custom content scroller -->
     <link href="{{ asset('assets/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet" />
 
-
+    <!-- http://localhost:62107/ -->
 
 
 

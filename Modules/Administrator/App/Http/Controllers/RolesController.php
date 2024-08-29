@@ -105,9 +105,9 @@ class RolesController extends Controller
 
     public function jsonForListRoles(Request $request)
     {
-        // where('roleName', '!=', 'Developer')->
+        // 
         $query = $request->get('q');
-        $results = Roles::get(['id', 'roleName']);
+        $results = Roles::where('roleName', '!=', 'Developer')->get(['id', 'roleName']);
         return response()->json($results, 200);
     }
 }

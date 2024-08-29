@@ -96,6 +96,7 @@ use Illuminate\Support\Facades\DB;
                         if (option.id == sessCustomers) {
                             // Stop the loop when the value is the same as targetValue
                             $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
+                            GetlistMaterial(option.id)
                             return false;
                         } else {
                             $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
@@ -119,6 +120,8 @@ use Illuminate\Support\Facades\DB;
                     var sessCustomers = "{{ session()->get('customers_id') }}";
                     if (sessCustomers == "*") {
                         $select.append('<option value="*">*All Material</option>');
+                    } else {
+                        $select.append(`<option value="*">*All Material</option>`);
                     }
                     $.each(data, function(index, option) {
                         if (option.id == sessCustomers) {

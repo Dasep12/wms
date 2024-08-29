@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Modules\Administrator\App\Models\Users;
 
 class AuthController extends Controller
@@ -16,9 +17,8 @@ class AuthController extends Controller
     public function Auth(Request $req)
     {
         $data = Users::where('username', $req->username)
-            ->where('password', $req->password)
             ->first();
-        if ($data != null) {
+        if ($data && Hash::check($req->password, $data->password)) {
             session()->put('user_id', $data->id);
             session()->put('fullname', $data->fullname);
             session()->put('role_id', $data->role_id);

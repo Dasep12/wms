@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
                     <div class="input-group">
                         <input type="text" id="searching" class="form-control form-control-sm" placeholder="Search Name Material..">
                         <span class="input-group-btn">
-                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" type="button"><i class="fa fa-search"></i> Search</button>
+                            <button onclick="search()" class="btn-filter btn btn-secondary btn-sm" id="searchBtn" type="button"><i class="fa fa-search"></i> Search</button>
                         </span>
                     </div>
                 </div>
@@ -102,6 +102,14 @@ use Illuminate\Support\Facades\DB;
         ReloadBarang()
         $("#searching").val("")
     }
+    var input = document.getElementById("searching");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchBtn").click();
+        }
+    });
+
     $(document).ready(function() {
 
         $("#jqGridMain").jqGrid({
@@ -371,6 +379,7 @@ use Illuminate\Support\Facades\DB;
                         if (option.id == sessCustomers) {
                             // Stop the loop when the value is the same as targetValue
                             $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
+                            GetlistMaterial(option.id)
                             return false;
                         } else {
                             $select.append('<option  value="' + option.id + '">' + option.name_customers + '</option>');
@@ -393,6 +402,8 @@ use Illuminate\Support\Facades\DB;
                     $select.empty();
                     var sessCustomers = "{{ session()->get('customers_id') }}";
                     if (sessCustomers == "*") {
+                        $select.append('<option value="*">*All Material</option>');
+                    } else {
                         $select.append('<option value="*">*All Material</option>');
                     }
                     $.each(data, function(index, option) {

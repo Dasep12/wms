@@ -102,16 +102,16 @@ class SummaryController extends Controller
         $sheet->setCellValue('I9', 'Packaging');
         $sheet->mergeCells('H8:I8');
         $sheet->setCellValue('J8', 'Begin Stock');
-        $sheet->setCellValue('J9', 'Unit');
-        $sheet->setCellValue('K9', 'Packaging');
+        $sheet->setCellValue('J9', 'Qty Unit');
+        $sheet->setCellValue('K9', 'Qty Packaging');
         $sheet->mergeCells('J8:K8');
         $sheet->setCellValue('L8', 'IN/OUT Stock');
-        $sheet->setCellValue('L9', 'Unit');
-        $sheet->setCellValue('M9', 'Packaging');
+        $sheet->setCellValue('L9', 'Qty Unit');
+        $sheet->setCellValue('M9', 'Qty Packaging');
         $sheet->mergeCells('L8:M8');
         $sheet->setCellValue('N8', 'Final Stock');
-        $sheet->setCellValue('N9', 'Unit');
-        $sheet->setCellValue('O9', 'Packaging');
+        $sheet->setCellValue('N9', 'Qty Unit');
+        $sheet->setCellValue('O9', 'Qty Packaging');
         $sheet->mergeCells('N8:O8');
 
         // Apply borders to a single cell
