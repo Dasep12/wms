@@ -166,12 +166,24 @@ use Illuminate\Support\Facades\DB;
                 label: 'Qty Units',
                 name: 'QtyUnits',
                 align: 'center',
-                width: 100
+                width: 100,
+                formatter: 'currency',
+                formatoptions: {
+                    prefix: '',
+                    suffix: '',
+                    thousandsSeparator: ','
+                },
             }, {
                 label: 'Qty Packaging',
                 name: 'QtyPackaging',
                 align: 'center',
-                width: 90
+                width: 90,
+                formatter: 'currency',
+                formatoptions: {
+                    prefix: '',
+                    suffix: '',
+                    thousandsSeparator: ','
+                },
             }, {
                 label: 'Updated At',
                 name: 'updated_at',
@@ -209,7 +221,7 @@ use Illuminate\Support\Facades\DB;
             pager: "#pager",
             rowList: [10, 30, 50],
             loadComplete: function() {
-                $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
+                // $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
                 $(window).on('resize', function() {
                     var gridWidth = $('#jqGridMain').closest('.ui-jqgrid').parent().width();
                     $('#jqGridMain').jqGrid('setGridWidth', gridWidth);
@@ -268,35 +280,71 @@ use Illuminate\Support\Facades\DB;
                     {
                         label: "Units",
                         name: "begin_stock_units",
-                        width: 60,
+                        width: 65,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }, {
                         label: "Packaging",
                         name: "begin_stock_packaging",
-                        width: 65,
+                        width: 70,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     },
                     {
                         label: "Units",
                         name: "QtyUnits",
-                        width: 60,
+                        width: 70,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }, {
                         label: "Packaging",
                         name: "QtyPackaging",
-                        width: 65,
+                        width: 70,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     },
                     {
                         label: "Units",
                         name: "EndStockUnits",
-                        width: 60,
+                        width: 70,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }, {
                         label: "Packaging",
                         name: "EndStockPackaging",
-                        width: 65,
+                        width: 70,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }
                 ],
                 jsonReader: {

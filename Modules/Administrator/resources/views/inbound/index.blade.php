@@ -225,9 +225,6 @@
             },
         });
 
-
-
-
         function loadDetailMaterial(subgrid_id, row_id) {
             // Function to load subgrid data
             var subgrid_table_id = subgrid_id + "_t";
@@ -265,11 +262,23 @@
                         name: "qtyUnits",
                         width: 90,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }, {
                         label: "Packaging",
                         name: "qtyPackaging",
                         width: 90,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }
                 ],
                 jsonReader: {
@@ -310,9 +319,6 @@
             <?php } ?>
             return btn;
         }
-
-
-
 
     })
 

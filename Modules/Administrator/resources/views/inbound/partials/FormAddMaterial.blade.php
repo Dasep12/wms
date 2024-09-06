@@ -138,7 +138,6 @@
                 qtyUnit = $("#QtyUnitInbound").val(),
                 qtyUnits = $("#QtyUnitsInbound").val(),
                 qtyPackaging = $("#QtyPackagingInbound").val();
-            console.log()
             var datas = {
                 'id': id,
                 'no_material': no_material,

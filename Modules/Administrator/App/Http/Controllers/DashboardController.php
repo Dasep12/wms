@@ -99,7 +99,7 @@ class DashboardController extends Controller
                     where types in ('out') and types_trans in ('Order')
                     $cust 
                     group by types, types_trans , date_trans
-                )Y on X.dates = Date 
+                )Y on Y.dates = Date 
                 order by Date ASC   ";
         $query = DB::select($sql);
         $data = [];

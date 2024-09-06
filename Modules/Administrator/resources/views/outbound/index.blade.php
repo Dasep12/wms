@@ -263,11 +263,23 @@
                         name: "qtyUnits",
                         width: 90,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }, {
                         label: "Packaging",
                         name: "qtyPackaging",
                         width: 90,
                         align: 'center',
+                        formatter: 'currency',
+                        formatoptions: {
+                            prefix: '',
+                            suffix: '',
+                            thousandsSeparator: ','
+                        },
                     }
                 ],
                 jsonReader: {
