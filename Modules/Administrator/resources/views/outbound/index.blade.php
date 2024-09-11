@@ -309,12 +309,12 @@
             var btn = "";
             <?php
             if (CrudMenuPermission($MenuUrl, $user_id, 'edit')) { ?>
-                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudOutbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button><button ${lock} type="button" data-id="${btnid}" onclick="CrudOutbound('putaway','${btnid}')" class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-truck"></i></button>`;
+                btn += `<button type="button" data-id="${btnid}" onclick="CrudOutbound('update','${btnid}')"  class="btn btn-sm text-white btn-option tes badge-success"><i class="fa fa-pencil"></i></button><button ${lock} type="button" data-id="${btnid}" onclick="CrudOutbound('putaway','${btnid}')" class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-truck"></i></button>`;
             <?php } else { ?>
                 btn += `<button disabled class="btn btn-sm text-white btn-option badge-success"><i class="fa fa-pencil"></i></button><button type="button" disabled class="btn btn-sm text-white btn-option badge-primary"><i class="fa fa-truck"></i></button>`;
             <?php } ?>
             <?php if (CrudMenuPermission($MenuUrl, $user_id, 'delete')) { ?>
-                btn += `<button ${ lock } type="button" data-id="${btnid}" onclick="CrudOutbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
+                btn += `<button  type="button" data-id="${btnid}" onclick="CrudOutbound('delete','${btnid}')" class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
             <?php } else { ?>
                 btn += `<button disabled class="btn btn-sm text-white btn-option badge-danger"><i class="fa fa-remove"></i></button>`;
             <?php } ?>
