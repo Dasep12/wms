@@ -2,7 +2,11 @@
 @include('administrator::layouts.header')
 <!-- header menu -->
 <?php
+
+use Modules\Administrator\App\Models\Users;
+
 $MenuUrl = "";
+$profile = Users::find(session()->get("user_id"));
 ?>
 
 <div id="fullPageLoader">
@@ -72,10 +76,16 @@ $MenuUrl = "";
                         <ul class=" navbar-right">
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                    @if($profile->profile)
+                                    <img src="{{ asset('assets/images/' . $profile->profile) }}" alt="">{{ ucwords(strtolower(session()->get("fullname"))) }}
+                                    @else
                                     <img src="{{ asset('assets/images/user_2.png') }}" alt="">{{ ucwords(strtolower(session()->get("fullname"))) }}
+                                    @endif
+
+
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                                    <!-- <a class="dropdown-item" href="#"> Profile</a> -->
+                                    <a class="dropdown-item" href="{{ url('administrator/profile') }}"><i class="fa fa-user pull-right"></i> Profile</a>
                                     <a class="dropdown-item" href="{{ url('logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
                             </li>

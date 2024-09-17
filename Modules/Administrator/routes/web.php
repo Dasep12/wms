@@ -162,4 +162,8 @@ Route::middleware(['check.session', 'check.menuAccess'])->prefix('administrator'
     Route::get("reportOutbound", 'ReportingController@outbound');
     Route::get("exportReportInbound", 'ReportingController@jsonExportExcelInbound');
     Route::get("exportReportOutbound", 'ReportingController@jsonExportExcelOutbound');
+
+    // REPORT INBOUND
+    Route::get("profile", 'ProfileController@index');
+    Route::post("updateProfile", 'ProfileController@updateProfile');
 });

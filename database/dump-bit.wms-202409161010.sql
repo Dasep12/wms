@@ -1,0 +1,2 @@
+/*!40000 ALTER TABLE `tbl_mst_customers` ENABLE KEYS */;
+UNLOCK TABLES;
