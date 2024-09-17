@@ -58,8 +58,14 @@ class SummaryStock extends Model
         $query = "SELECT * FROM vw_tbl_control_stock";
         if ($custId != null) {
             $query .= " WHERE customers_id = '$custId' ";
+            if ($req->search) {
+                $query .= " AND name_material like '%$req->search%' ";
+            }
         } else {
             $query .= " WHERE customers_id !='$custId' ";
+            if ($req->search) {
+                $query .= " AND name_material like '%$req->search%' ";
+            }
         }
 
         $query .= " ORDER BY updated_at DESC LIMIT  $start , $limit  ";
@@ -107,7 +113,7 @@ class SummaryStock extends Model
         $start = ($page - 1) * $limit;
 
         // Total count of records
-        $qry = "SELECT COUNT(1) AS count FROM vw_tbl_control_stock_detail WHERE material_id = '" . $req->id . "'   ";
+        $qry = "SELECT COUNT(1) AS count FROM vw_tbl_control_stock_detail_v2 WHERE material_id = '" . $req->id . "'   ";
 
         $countResult = DB::select($qry);
         $count = $countResult[0]->count;
@@ -120,13 +126,22 @@ class SummaryStock extends Model
         }
 
         // Fetch data using DB::raw
-        $query = "SELECT * FROM vw_tbl_control_stock_detail WHERE material_id = '" . $req->id . "' ORDER BY dates DESC LIMIT  $start , $limit  ";
+        $query = "SELECT * FROM vw_tbl_control_stock_detail_v2 WHERE material_id = '" . $req->id . "' ORDER BY dates DESC LIMIT  $start , $limit  ";
 
         $data = DB::select($query);
 
         // Prepare rows for jqGrid
         $rows = [];
         foreach ($data as $item) {
+            $inunits = 0;
+            $Packaging = 0;
+            if ($item->types == "in") {
+                $inunits = $item->begin_stock_units + $item->QtyUnits;
+                $Packaging = $item->begin_stock_packaging + $item->QtyPackaging;
+            } else {
+                $inunits = $item->begin_stock_units - $item->QtyUnits;
+                $Packaging = $item->begin_stock_packaging - $item->QtyPackaging;
+            }
             $rows[] = [
                 'unit'                  => $item->unit,
                 'units'                 => $item->units,
@@ -138,12 +153,12 @@ class SummaryStock extends Model
                 'QtyUnits'              => $item->QtyUnits,
                 'QtyPackaging'          => $item->QtyPackaging,
                 'dates'                 => $item->dates,
-                'begin_stock_unit'      => $item->begin_stock_unit,
+                // 'begin_stock_unit'      => $item->begin_stock_unit,
                 'begin_stock_units'     => $item->begin_stock_units,
                 'begin_stock_packaging' => $item->begin_stock_packaging,
-                'EndStockUnit'          => $item->EndStockUnit,
-                'EndStockUnits'         => $item->EndStockUnits,
-                'EndStockPackaging'     => $item->EndStockPackaging,
+                // 'EndStockUnit'          => $item->EndStockUnit,
+                'EndStockUnits'         => $inunits,
+                'EndStockPackaging'     => $Packaging,
                 'cell' => [
                     $item->id,
                 ] // Adjust fields as needed

@@ -47,7 +47,7 @@
                         <div class="col-md-2 pr-1 pl-1">
                             <div class="form-group">
                                 <label for="no_truck" class="">No.Truck :</label>
-                                <input type="text" required name="no_truck" id="no_truck" class="form-control" placeholder="*Nopol Truck">
+                                <input type="text" maxlength="10" required name="no_truck" id="no_truck" class="form-control" placeholder="*Nopol Truck">
                             </div>
                         </div>
 
