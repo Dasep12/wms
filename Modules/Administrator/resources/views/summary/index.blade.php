@@ -305,23 +305,37 @@ use Illuminate\Support\Facades\DB;
                         name: "QtyUnits",
                         width: 70,
                         align: 'center',
-                        formatter: 'currency',
-                        formatoptions: {
-                            prefix: '',
-                            suffix: '',
-                            thousandsSeparator: ','
-                        },
+                        formatter: function(cellvalue, options, rowObject) {
+                            // Format number as currency with thousands separator
+                            const formattedValue = cellvalue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+                            // Check if the status is 'out'
+                            if (rowObject.types == 'OUT' || rowObject.types == 'out') {
+                                // Return formatted value with a minus sign and red color
+                                return '- ' + formattedValue + '.00';
+                            } else {
+                                // Return the formatted value normally
+                                return formattedValue + '.00';
+                            }
+                        }
                     }, {
                         label: "Packaging",
                         name: "QtyPackaging",
                         width: 70,
                         align: 'center',
-                        formatter: 'currency',
-                        formatoptions: {
-                            prefix: '',
-                            suffix: '',
-                            thousandsSeparator: ','
-                        },
+                        formatter: function(cellvalue, options, rowObject) {
+                            // Format number as currency with thousands separator
+                            const formattedValue = cellvalue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+                            // Check if the status is 'out'
+                            if (rowObject.types == 'OUT' || rowObject.types == 'out') {
+                                // Return formatted value with a minus sign and red color
+                                return '- ' + formattedValue + '.00';
+                            } else {
+                                // Return the formatted value normally
+                                return formattedValue + '.00';
+                            }
+                        }
                     },
                     {
                         label: "Units",

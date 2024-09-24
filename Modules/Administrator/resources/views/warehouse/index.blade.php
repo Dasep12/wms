@@ -155,8 +155,6 @@
             },
         });
 
-
-
         function actionBarangFormatter(cellvalue, options, rowObject) {
             var btnid = options.rowId;
             var btn = "";
@@ -173,8 +171,6 @@
             <?php } ?>
             return btn;
         }
-
-
 
     })
 
