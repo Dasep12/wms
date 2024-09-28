@@ -188,7 +188,7 @@ use Illuminate\Support\Facades\DB;
                 label: 'Updated At',
                 name: 'updated_at',
                 align: 'center',
-                width: 140,
+                // width: 140,
                 formatter: "date",
                 formatoptions: {
                     srcformat: "ISO8601Long",
@@ -216,7 +216,7 @@ use Illuminate\Support\Facades\DB;
             rownumWidth: 30,
             rowNum: 15,
             height: 'auto',
-            shrinkToFit: false,
+            shrinkToFit: true,
             autowidth: true,
             pager: "#pager",
             rowList: [10, 30, 50],

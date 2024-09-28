@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Modules\Administrator\App\Models\Material;
 use Modules\Administrator\App\Models\Units;
 
 class UnitsController extends Controller
@@ -73,8 +74,13 @@ class UnitsController extends Controller
 
     public function jsonDelete(Request $req)
     {
-        $resp  = Units::jsonDelete($req);
-        return response()->json(['msg' => $resp]);
+        $cek = Material::where('unit_id', $req->id);
+        if ($cek->count() > 0) {
+            return response()->json(['msg' => 'Unit Has Relation Cannot Deleted'], 500);
+        } else {
+            $resp  = Units::jsonDelete($req);
+            return response()->json(['msg' => $resp]);
+        }
     }
 
     public function jsonForListUnit(Request $request)

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Modules\Administrator\App\Models\Location;
+use Modules\Administrator\App\Models\Material;
 use Modules\Administrator\App\Models\Warehouse;
 
 class LocationController extends Controller
@@ -71,8 +72,13 @@ class LocationController extends Controller
 
     public function jsonDelete(Request $req)
     {
-        $resp  = Location::jsonDelete($req);
-        return response()->json(['msg' => $resp]);
+        $cek = Material::where('location_id', $req->id);
+        if ($cek->count() > 0) {
+            return response()->json(['msg' => 'Location Has Relation Cannot Deleted'], 500);
+        } else {
+            $resp  = Location::jsonDelete($req);
+            return response()->json(['msg' => $resp]);
+        }
     }
 
     public function jsonForListLocation(Request $request)

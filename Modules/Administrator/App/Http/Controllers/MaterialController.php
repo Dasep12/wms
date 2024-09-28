@@ -75,7 +75,12 @@ class MaterialController extends Controller
 
     public function jsonDelete(Request $req)
     {
-        $resp  = Material::jsonDelete($req);
-        return response()->json(['msg' => $resp]);
+        $cekTrans = DB::table("tbl_trn_detailshipingmaterial")->where('material_id', $req->id);
+        if ($cekTrans->count() > 0) {
+            return response()->json(['msg' => 'Material Has Been Transaction Cannot Deleted'], 500);
+        } else {
+            $resp  = Material::jsonDelete($req);
+            return response()->json(['msg' => $resp]);
+        }
     }
 }

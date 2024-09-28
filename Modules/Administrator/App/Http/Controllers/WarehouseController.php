@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Modules\Administrator\App\Models\Location;
 use Modules\Administrator\App\Models\Warehouse;
 
 class WarehouseController extends Controller
@@ -65,8 +66,13 @@ class WarehouseController extends Controller
 
     public function jsonDelete(Request $req)
     {
-        $resp  = Warehouse::jsonDelete($req);
-        return response()->json(['msg' => $resp]);
+        $cek = Location::where('warehouse_id', $req->id);
+        if ($cek->count() > 0) {
+            return response()->json(['msg' => 'Warehouse Has Relation Cannot Deleted'], 500);
+        } else {
+            $resp  = Warehouse::jsonDelete($req);
+            return response()->json(['msg' => $resp]);
+        }
     }
 
     public function jsonForListWarehouse(Request $request)

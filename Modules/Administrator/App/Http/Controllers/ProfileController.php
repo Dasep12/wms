@@ -39,7 +39,7 @@ class ProfileController extends Controller
                 $file = $req->file('profile');
 
                 // Create a unique filename using the original extension
-                $newFileName = time() . '_' . $file->getClientOriginalExtension();
+                $newFileName = time() . '_.' . $file->getClientOriginalExtension();
 
                 // Store the file with the new name in the 'uploads' directory inside 'storage/app/public'
                 // $file->storeAs('assets/images', $newFileName, 'public');

@@ -26,9 +26,7 @@
             <div class="x_content">
                 <table id="jqGridMain"></table>
                 <div id="pager"></div>
-
                 <hr>
-
                 <div class="form-group">
                     @if(CrudMenuPermission($MenuUrl,$user_id, "add"))
                     <button type="button" name="tloEnable" onclick="CrudInbound('create','*')" class="btn btn-sm btn-outline-secondary"><i class="fa fa-plus"></i> Create</button>

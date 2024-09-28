@@ -282,7 +282,7 @@
                         respText = unescape(respText).replaceAll("_n_", "<br/>")
 
                         var errMsg = '<div class="col-md-12"><div class="alert alert-warning mt-2" role="alert"><small><b> Error ' + xhr.status + '!</b><br/>' + respText + '</small></div></div>'
-                        $('#crudCustomersError').html(errMsg);
+                        $('#CrudMaterialError').html(errMsg);
                     },
                 });
             } else {

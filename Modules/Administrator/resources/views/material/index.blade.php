@@ -144,30 +144,14 @@
                 width: 70,
                 formatter: actionBarangFormatter
             }],
-            jsonReader: {
-                repeatitems: false,
-                root: function(obj) {
-                    return obj.rows;
-                },
-                page: function(obj) {
-                    return obj.page;
-                },
-                total: function(obj) {
-                    return obj.total;
-                },
-                records: function(obj) {
-                    return obj.records;
-                }
-            },
             viewrecords: true,
-            width: '100%',
-            rowNum: 15,
-            pager: "#pager",
+            width: 780,
             height: 350,
-            autoresizeOnLoad: true,
+            rowNum: 20,
             autowidth: true,
-            shrinkToFit: false,
-            fromServer: true,
+            loadonce: false,
+            rowNum: 20,
+            pager: "#pager",
             rowList: [10, 30, 50],
             loadComplete: function(data) {
                 // $(this).jqGrid('setGridWidth', $("#jqGridMain").closest(".ui-jqgrid").parent().width());
